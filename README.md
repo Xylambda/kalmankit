@@ -47,6 +47,7 @@ from matplotlib import pyplot as plt
 from kalmanfilter import kalman_filter
 from pandas.plotting import register_matplotlib_converters
 
+
 # set the parameters
 Z = ibex['Close'].values
 xk = 1
@@ -69,8 +70,8 @@ plt.legend()
 ![signal](signal.png)
 
 ## References
-* **[1]** Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)
+* [1] Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)
 
-* **[2]** Bilgin's Blog - [Kalman filter for dummies](http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
+* [2] Bilgin's Blog - [Kalman filter for dummies](http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
 
-* **[3]** Greg Welch, Gary Bishop - [An Introduction to the Kalman Filter](https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf)
+* [3] Greg Welch, Gary Bishop - [An Introduction to the Kalman Filter](https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf)
