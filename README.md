@@ -7,10 +7,14 @@ The Kalman filter estimates a process by using a form of feedback control: time
 update (predict) and measurement update (correct).
 
 The prediction step:
-![predict](img/predict.png)
+<p align="center">
+  <img src="img/predict.png">
+</p>
 
 The update step:
-![update](img/update.png)
+<p align="center">
+  <img src="img/update.png">
+</p>
 
 Notice how the Kalman gain regulates the weight between the prediction of the
 hidden state and the real observation.
