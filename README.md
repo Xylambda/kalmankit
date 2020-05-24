@@ -1,6 +1,19 @@
 # Kalman Filter
-A simple implementation of the Kalman filter algorithm using NumPy. To 
-understand the notation used in the code, see the references and the end.
+A simple implementation of the Kalman filter algorithm using NumPy. The Kalman
+filter is an optimal estimation algorithm, and it is optimal in the sense of 
+reducing the expected squared error of the parameters.
+
+The Kalman filter estimates a process by using a form of feedback control: time
+update (predict) and measurement update (correct).
+
+The prediction step:
+![predict](img/predict.png)
+
+The update step:
+![update](img/update.png)
+
+Notice how the Kalman gain regulates the weight between the prediction of the
+hidden state and the real observation.
 
 ## Installation
 Normal user:
@@ -35,10 +48,11 @@ pytest -v tests/
 ```
 
 ## Usage
-To make use, you only need to decide the value of the different parameters.
-Let's apply the Kalman filter to extract the signal of `Ibex 35` financial time
-series. This series was obtained using [investpy](https://github.com/alvarobartt/investpy), 
-but you will find the csv file in the examples folder.
+To make use of the Kalman filter, you only need to decide the value of the 
+different parameters. Let's apply the Kalman filter to extract the signal of 
+`Ibex 35` financial time series. This series was obtained using 
+[investpy](https://github.com/alvarobartt/investpy), but you will find the csv 
+file in the examples folder.
 ```python
 import numpy as np
 import pandas as pd
@@ -46,6 +60,10 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from kalmanfilter import kalman_filter
 from pandas.plotting import register_matplotlib_converters
+
+# read data
+ibex = pd.read_csv('ibex35.csv')
+ibex['Date'] = pd.to_datetime(ibex['Date'])
 
 
 # set the parameters
@@ -57,8 +75,10 @@ H = np.ones(len(Z))
 Q = 0.005
 R = 0.01
 
+# apply kalman filter
 x, p = kalman_filter(Z, xk, Pk, A, H, Q, R)
 
+# plot results
 register_matplotlib_converters()
 
 plt.figure(figsize=(15,8))
@@ -67,11 +87,11 @@ plt.plot(ibex['Date'], x, label='Filtered IBEX 35')
 plt.xticks(rotation=0);
 plt.legend()
 ```
-![signal](signal.png)
+![signal](img/signal.png)
 
 ## References
-* [1] Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)
+* Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)
 
-* [2] Bilgin's Blog - [Kalman filter for dummies](http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
+* Bilgin's Blog - [Kalman filter for dummies](http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
 
-* [3] Greg Welch, Gary Bishop - [An Introduction to the Kalman Filter](https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf)
+* Greg Welch, Gary Bishop - [An Introduction to the Kalman Filter](https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf)

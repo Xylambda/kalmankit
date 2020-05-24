@@ -5,8 +5,8 @@ import numpy as np
 def kalman_filter(Z, xk, Pk, A, H, Q, R):
     """Kalman filter.
     
-    Applies the Kalman filter algorithm over a given univariate series. See
-    2nd and 3rd references to understand notation.
+    Applies the Kalman filter algorithm over a given time series. See 2nd and 
+    3rd references to understand notation.
     
     Parameters
     ----------
@@ -17,10 +17,10 @@ def kalman_filter(Z, xk, Pk, A, H, Q, R):
     Pk : float
         Initial covariance estimate.
     A : numpy.array
-        A (n x n) matrix that relates the state at the previous time step k-1
-        to the state at the current step k.
+        A matrix that relates the state at the previous time step k-1 to the 
+        state at the current step k.
     H : numpy.array
-        A (m x n) matrix that relates the state to the measurement z_k.
+        A matrix that relates the state to the measurement z_k.
     Q : float
         Process noise covariance.
     R : float
@@ -56,7 +56,7 @@ def kalman_filter(Z, xk, Pk, A, H, Q, R):
         # update step
         Kk = (Pk * Hk.T) / (Hk * Pk * Hk.T + R) # kalman gain
         xk = xk + Kk * (zk - Hk * xk)
-        Pk = (1 - Kk * Hk) * Pk
+        Pk = (1 - Kk * Hk) * Pk # 1 is the identity matrix
         
         # a posteriori estimates
         states[k] = xk
