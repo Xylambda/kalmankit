@@ -65,10 +65,10 @@ from matplotlib import pyplot as plt
 from kalmanfilter import kalman_filter
 from pandas.plotting import register_matplotlib_converters
 
+
 # read data
 ibex = pd.read_csv('ibex35.csv')
 ibex['Date'] = pd.to_datetime(ibex['Date'])
-
 
 # set the parameters
 Z = ibex['Close'].values
