@@ -1,7 +1,15 @@
-# Kalman Filter
-A simple implementation of the Kalman filter algorithm using NumPy. The Kalman
-filter is an optimal estimation algorithm, and it is optimal in the sense of 
-reducing the expected squared error of the parameters.
+<p align="center">
+  <img src="img/logo.png" width="400">
+</p>
+
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Xylambda/kalmanfilter?label=VERSION&style=for-the-badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Xylambda/kalmanfilter?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/Xylambda/kalmanfilter?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/Xylambda/kalmanfilter?style=for-the-badge)
+
+General multidimensional implementation of the Kalman filter algorithm using 
+NumPy. The Kalman filter is an optimal estimation algorithm, and it is optimal 
+in the sense of reducing the expected squared error of the parameters.
 
 The Kalman filter estimates a process by using a form of feedback control: time
 update (predict) and measurement update (correct).
@@ -29,7 +37,7 @@ pip install kalmanfilter/.
 alternatively:
 ```bash
 git clone https://github.com/Xylambda/kalmanfilter.git
-pip install kalmanfilter/. -r kalmanfilter/requirements-base.txt
+pip install kalmanfilter/. -r kalmanfilter/requirements.txt
 ```
 
 Developer:
@@ -39,13 +47,7 @@ pip install -e kalmanfilter/. -r kalmanfilter/requirements-dev.txt
 ```
 
 ## Tests
-To run test, you must install the library as a `developer`.
-```bash
-cd kalmanfilter/
-sh run_tests.sh
-```
-
-alternatively:
+To run tests you must install the library as a `developer`.
 ```bash
 cd kalmanfilter/
 pytest -v tests/
@@ -55,43 +57,71 @@ pytest -v tests/
 To make use of the Kalman filter, you only need to decide the value of the 
 different parameters. Let's apply the Kalman filter to extract the signal of 
 `Ibex 35` financial time series. This series was obtained using 
-[investpy](https://github.com/alvarobartt/investpy), but you will find the csv 
-file in the examples folder.
+[investpy](https://github.com/alvarobartt/investpy), but a pkl file is 
+provided.
 ```python
+import os
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
-from matplotlib import pyplot as plt
-from kalmanfilter import kalman_filter
-from pandas.plotting import register_matplotlib_converters
+from pathlib import Path
+from kalmanfilter import KalmanFilter
 
+
+DATA_PATH = Path(os.path.abspath('')).parent / "tests/data"
 
 # read data
-ibex = pd.read_csv('ibex35.csv')
-ibex['Date'] = pd.to_datetime(ibex['Date'])
+ibex = pd.read_pickle(DATA_PATH / "ibex35.pkl")
 
 # set the parameters
 Z = ibex['Close'].values
-xk = 1
-Pk = np.array([1])
-A = np.array([1])
-H = np.ones(len(Z))
+A = np.array([[1]])
+x = np.array([[1]])
+
+B = np.array([[0]])
+u = np.array([[0]])
+
+Pk = np.array([[1]])
 Q = 0.005
+
+H = np.array([[1]])
 R = 0.01
 
 # apply kalman filter
-x, p = kalman_filter(Z, xk, Pk, A, H, Q, R)
+kf = KalmanFilter(A=A, xk=x, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
+states, errors = kf.run_filter(Z)
 
 # plot results
-register_matplotlib_converters()
+plt.style.use('bmh')
 
-plt.figure(figsize=(15,8))
-plt.plot(ibex['Date'], ibex['Close'], label='IBEX 35')
-plt.plot(ibex['Date'], x, label='Filtered IBEX 35')
-plt.xticks(rotation=0);
-plt.legend()
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(17,8))
+
+ibex.plot(ax=ax)
+ax.plot(ibex.index, states)
+ax.legend(['IBEX 35', 'Filtered IBEX 35'])
+ax.set_title("Kalman States")
+ax.set_xlabel("");
 ```
 ![signal](img/signal.png)
+
+You can also compute the `a posterior stimates` manually:
+```python
+kf = KalmanFilter(A=A, xk=x, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
+
+states = np.zeros_like(Z)
+errors = np.zeros_like(Z)
+
+for k, zk in enumerate(Z):
+    kf.predict()
+    xk, Pk = kf.update(zk)
+    
+    states[k] = xk
+    errors[k] = Pk
+```
+
+Used notation comes mainly from `Bilgin's blog` and a book called `Bayesian
+filtering and Smoothing`, by Simo Särkkä. Below you will find more references.
 
 ## References
 * Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)
@@ -99,3 +129,5 @@ plt.legend()
 * Bilgin's Blog - [Kalman filter for dummies](http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
 
 * Greg Welch, Gary Bishop - [An Introduction to the Kalman Filter](https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf)
+
+* Simo Särkkä - Bayesian filtering and Smoothing. Cambridge University Press.
