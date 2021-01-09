@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img/logo.png" width="400">
+  <img src="img/logo.png" width="700">
 </p>
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Xylambda/kalmanfilter?label=VERSION&style=for-the-badge)
@@ -93,8 +93,6 @@ kf = KalmanFilter(A=A, xk=x, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
 states, errors = kf.run_filter(Z)
 
 # plot results
-plt.style.use('bmh')
-
 fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(17,8))
 
 ibex.plot(ax=ax)
