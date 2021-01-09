@@ -1,5 +1,5 @@
 import numpy as np 
-from kalmanfilter import kalman_filter
+from kalmanfilter import KalmanFilter
 
 
 data = np.array([0.39, 0.50, 0.48, 0.29, 0.25, 0.32, 0.34, 0.48, 0.41, 0.45])
@@ -15,24 +15,30 @@ def test_kalman():
 
     # set parameters
     Z = data
-    xk = 0
-    Pk = 1
-    A = np.array([1])
-    H = np.ones_like(Z)
+    A = np.array([[1]])
+    xk = np.array([[0]])
+
+    B = np.array([[0]])
+    u = np.array([[0]])
+
+    Pk = np.array([[1]])
+    H = np.array([[1]])
     Q = 0
     R = 0.1
 
-    states, covariances = kalman_filter(Z, xk, Pk, A, H, Q, R)
+    kf = KalmanFilter(A=A, xk=xk, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
+    states, covariances = kf.run_filter(Z)
 
     np.testing.assert_allclose(
-                                states, 
-                                expected_states, 
-                                rtol=1e-06, 
-                                atol=0
-                            )
+        states, 
+        expected_states, 
+        rtol=1e-06, 
+        atol=0
+    )
+
     np.testing.assert_allclose(
-                                covariances, 
-                                expected_covariances, 
-                                rtol=1e-06, 
-                                atol=0
-                            )
+        covariances, 
+        expected_covariances, 
+        rtol=1e-06, 
+        atol=0
+    )
