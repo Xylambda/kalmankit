@@ -28,6 +28,11 @@ class KalmanFilter:
         Process noise covariance.
     R : numpy.array
         Measurement noise covariance.
+
+    Attributes
+    ----------
+    state_size : int
+        Dimensionality of the state.
         
     Returns
     -------
@@ -59,8 +64,11 @@ class KalmanFilter:
         self.Pk = Pk
         self.H = H
         self.Q = Q
-        self.R = R        
-    
+        self.R = R   
+
+        # attributes
+        self.state_size = self.xk.shape[0] # usually called 'n'
+
     def predict(self):
         """Predicts states and covariances.
         
@@ -76,20 +84,13 @@ class KalmanFilter:
     def update(self, zk):
         """Updates states and covariances.
         
-        Update step of the Kalman filter by combining the predictions with the
-        observed variable Z at time k.
+        Update step of the Kalman filter. That is, the filter combines the 
+        predictions with the observed variable Z at time k.
         
         Parameters
         ----------
         zk : numpy.array
             Observed variable at time k.
-            
-        Returns
-        -------
-        xk : numpy.array
-            Updated estimate of the mean at time k.
-        Pk : numpy.array
-            Updated estimate of the covariance at time k.
         """
         # innovation (pre-fit residual) covariance
         Sk = np.matmul(self.H, np.matmul(self.Pk, self.H.T)) + self.R
@@ -101,11 +102,8 @@ class KalmanFilter:
         self.xk = self.xk + np.matmul(Kk, zk - np.matmul(self.H, self.xk))
         
         # update error covariance
-        _aux = np.matmul(Kk, self.H)
-        I = np.identity(_aux.shape[0])
-        self.Pk = np.matmul(I - _aux, self.Pk)
-        
-        return self.xk, self.Pk
+        I = np.identity(self.state_size)
+        self.Pk = np.matmul(I - np.matmul(Kk, self.H), self.Pk)
     
     def run_filter(self, Z):
         """Runs filter over Z.
@@ -131,9 +129,9 @@ class KalmanFilter:
         
         for k, zk in enumerate(Z):
             self.predict()
-            xk, Pk = self.update(zk)
+            self.update(zk)
             
-            states[k] = xk
-            errors[k] = Pk
+            states[k] = self.xk
+            errors[k] = self.Pk
             
         return states, errors

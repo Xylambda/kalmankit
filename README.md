@@ -11,8 +11,8 @@ General multidimensional implementation of the Kalman filter algorithm using
 NumPy. The Kalman filter is an optimal estimation algorithm, and it is optimal 
 in the sense of reducing the expected squared error of the parameters.
 
-The Kalman filter estimates a process by using a form of feedback control: time
-update (predict) and measurement update (correct).
+The standard Kalman filter estimates a process by using a form of feedback 
+control: time update (predict) and measurement update (correct/update).
 
 The prediction step:
 <p align="center">
@@ -57,7 +57,7 @@ pytest -v tests/
 To make use of the Kalman filter, you only need to decide the value of the 
 different parameters. Let's apply the Kalman filter to extract the signal of 
 `Ibex 35` financial time series. This series was obtained using 
-[investpy](https://github.com/alvarobartt/investpy), but a pkl file is 
+[investpy](https://github.com/alvarobartt/investpy), but a `.pkl` file is 
 provided.
 ```python
 import os
@@ -103,7 +103,7 @@ ax.set_xlabel("");
 ```
 ![signal](img/signal.png)
 
-You can also compute the `a posterior stimates` manually:
+You can also compute the `a posterior estimates` manually:
 ```python
 kf = KalmanFilter(A=A, xk=x, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
 
@@ -112,10 +112,10 @@ errors = np.zeros_like(Z)
 
 for k, zk in enumerate(Z):
     kf.predict()
-    xk, Pk = kf.update(zk)
+    kf.update(zk)
     
-    states[k] = xk
-    errors[k] = Pk
+    states[k] = kf.xk
+    errors[k] = kf.Pk
 ```
 
 Used notation comes mainly from `Bilgin's blog` and a book called `Bayesian
