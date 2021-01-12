@@ -1,0 +1,15 @@
+kalmanfilter package
+====================
+
+.. automodule: kalmanfilter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   kalmanfilter._standard
