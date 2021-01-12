@@ -6,6 +6,7 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Xylambda/kalmanfilter?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Xylambda/kalmanfilter?style=for-the-badge)
 ![GitHub issues](https://img.shields.io/github/issues/Xylambda/kalmanfilter?style=for-the-badge)
+![Travis (.org)](https://img.shields.io/travis/xylambda/kalmanfilter?style=for-the-badge)
 
 General multidimensional implementation of the Kalman filter algorithm using 
 NumPy. The Kalman filter is an optimal estimation algorithm, and it is optimal 

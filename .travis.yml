@@ -1,10 +1,9 @@
 language: python
 install:
-  - travis_retry pip install -U -r requirements-doc.txt
-  - travis_retry pip install -e .
+  - travis_retry pip install -e -U -r requirements-dev.txt
 
 script:
-  - 'true'
+  - pytest
 
 after_success:
   - make -C docs html
