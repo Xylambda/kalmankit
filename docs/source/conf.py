@@ -57,10 +57,11 @@ html_theme = 'furo'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-import pkg_resources
+import versioneer
+release = versioneer.get_version()
 
 # Read the project version from setup.py
-release = pkg_resources.require(project)[0].version
+#release = pkg_resources.require(project)[0].version
 
 
 # -- Extension configuration -------------------------------------------------
