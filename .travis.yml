@@ -1,8 +1,7 @@
 language: python
 install:
   - travis_retry pip install -e . -r requirements-doc.txt
-  - travis_retry pip install versioneer # make sure it is installed
-
+  
 script:
   - pytest
 
