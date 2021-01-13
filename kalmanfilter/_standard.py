@@ -3,30 +3,36 @@ import numpy as np
 
 
 class KalmanFilter:
-    """Kalman filter.
-    
-    Applies the Kalman filter algorithm. See 2nd and 3rd references to 
-    understand notation.
+    """Applies the Kalman filter algorithm.
 
     The standard Kalman Filter uses a form of feedback-control loop of two
-    stages to model dynamic linear systems:
+    stages to model dynamic linear systems. 
+    
+    For each time step :math:`k`
 
-    Predict step
+    1. Predict step
+
     .. math::
 
-    \\begin{matrix}
-        \\hat{x}_{k}^{-} = A \\hat{x}_{k-1}^{-} + B u_{k-1} \\ 
+        \hat{x}_{k}^{-} = A \hat{x}_{k-1}^{-} + B u_{k-1}
+
+    .. math::
         P_{k}^{-} = AP_{k-1}A^{T} + Q
-    \\end{matrix}
 
-    Update step
+    2. Update step
+
     .. math::
 
-    \\begin{matrix}
-        K_k = P_{k}^{-} H^{T} (H P_{k}^{-} H^{T} + R)^{-1} \\ 
-        \\hat{x_{k}} = \\hat{x}_{k}^{-} + K_k (z_k - H \\hat{x}_{k}^{-})) \\ 
+        K_k = P_{k}^{-} H^{T} (H P_{k}^{-} H^{T} + R)^{-1}
+
+    .. math::
+
+        \hat{x_{k}} = \hat{x}_{k}^{-} + K_k (z_k - H \hat{x}_{k}^{-})
+        
+    .. math::
         P_k = (I - K_k H) P_{k}^{-}
-    \\end{matrix}
+
+    See 2nd and 3rd references to understand notation.
     
     Parameters
     ----------

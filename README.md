@@ -18,9 +18,7 @@ control loop: time update (predict) and measurement update (correct/update).
 
 ## Standard Kalman Filter
 The standard Kalman Filter (currently the only one supported) can be used to 
-model `dynamic linar systems`. 
-
-It can be summarized by the following expressions:
+model `dynamic linar systems`. It can be summarized by the following expressions:
 
 The prediction step:
 <p align="center">

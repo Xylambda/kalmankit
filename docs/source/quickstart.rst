@@ -5,7 +5,9 @@ Quick Start
 Usage
 #####
 The usage is pretty simple given that parameters are correct:
+
 .. code-block:: python
+    
     import os
     import numpy as np
     import pandas as pd
@@ -23,10 +25,10 @@ The usage is pretty simple given that parameters are correct:
     # set the parameters
     Z = ibex['Close'].values
     A = np.array([[1]])
-    x = np.array([[1]])
+    xk = np.array([[1]])
 
     B = np.array([[0]])
-    u = np.array([[0]])
+    U = np.zeros((len(Z), 1))
 
     Pk = np.array([[1]])
     Q = 0.005
@@ -35,5 +37,5 @@ The usage is pretty simple given that parameters are correct:
     R = 0.01
 
     # apply kalman filter
-    kf = KalmanFilter(A=A, xk=x, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
-    states, errors = kf.run_filter(Z)
+    kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
+    states, errors = kf.run_filter(Z, U)
