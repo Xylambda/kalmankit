@@ -7,6 +7,26 @@ class KalmanFilter:
     
     Applies the Kalman filter algorithm. See 2nd and 3rd references to 
     understand notation.
+
+    The standard Kalman Filter uses a form of feedback-control loop of two
+    stages to model dynamic linear systems:
+
+    Predict step
+    .. math::
+
+    \begin{matrix}
+        \hat{x}_{k}^{-} = A\hat{x}_{k-1}^{-} + B u_{k-1} \\ 
+        P_{k}^{-} = AP_{k-1}A^{T} + Q
+    \end{matrix}
+
+    Update step
+    .. math::
+
+    \begin{matrix}
+        K_k = P_{k}^{-} H^{T} (H P_{k}^{-} H^{T} + R)^{-1} \\ 
+        \hat{x_{k}} = \hat{x}_{k}^{-} + K_k (z_k - H \hat{x}_{k}^{-})) \\ 
+        P_k = (I - K_k H) P_{k}^{-}
+    \end{matrix}
     
     Parameters
     ----------
@@ -17,22 +37,22 @@ class KalmanFilter:
         Initial (k=0) mean estimate.
     B : numpy.array
         Control-input matrix.
-    u : numpy.array
-        Control-input vector.
     Pk : numpy.array
         Initial (k=0) covariance estimate.
     H : numpy.array
         Observation matrix. A matrix that relates the state to the measurement 
         zk.
-    Q : numpy.array
+    Q : numpy.array or float.
         Process noise covariance.
-    R : numpy.array
+    R : numpy.array or float.
         Measurement noise covariance.
 
     Attributes
     ----------
     state_size : int
-        Dimensionality of the state.
+        Dimensionality of the state (n).
+    I : numpy.array
+        Identity matrix (n x n).
         
     Returns
     -------
@@ -52,15 +72,18 @@ class KalmanFilter:
     .. [3] Greg Welch, Gary Bishop - An Introduction to the Kalman Filter:
        https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf
        
-    .. [4] Tucker McClure - How Kalman Filters Work, Part 1
+    .. [4] Tucker McClure - How Kalman Filters Work, Part 1.
        http://www.anuncommonlab.com/articles/how-kalman-filters-work/
+
+    .. [5] Matthew B. Rhudy, Roger A. Salguero and Keaton Holappa - A Kalman 
+       Filtering Tutorial for Undergraduate students.
+       https://aircconline.com/ijcses/V8N1/8117ijcses01.pdf
     
     """
-    def __init__(self, A, xk, B, u, Pk, H, Q, R):
+    def __init__(self, A, xk, B, Pk, H, Q, R):
         self.A = A
         self.xk = xk
         self.B = B
-        self.u = u
         self.Pk = Pk
         self.H = H
         self.Q = Q
@@ -68,15 +91,21 @@ class KalmanFilter:
 
         # attributes
         self.state_size = self.xk.shape[0] # usually called 'n'
+        self.I = np.identity(self.state_size)
 
-    def predict(self):
+    def predict(self, uk):
         """Predicts states and covariances.
         
         Predict step of the Kalman filter. Computes the prior values of state 
         and covariance using the previous timestep (if any).
+
+        Parameters
+        ----------
+        uk : numpy.array
+            Control-input vector at time k.
         """        
         # project state ahead
-        self.xk = np.matmul(self.A, self.xk) + np.matmul(self.B, self.u)
+        self.xk = np.matmul(self.A, self.xk) + np.matmul(self.B, uk)
         
         # project error covariance ahead
         self.Pk = np.matmul(self.A, np.matmul(self.Pk, self.A.T) + self.Q)
@@ -102,10 +131,9 @@ class KalmanFilter:
         self.xk = self.xk + np.matmul(Kk, zk - np.matmul(self.H, self.xk))
         
         # update error covariance
-        I = np.identity(self.state_size)
-        self.Pk = np.matmul(I - np.matmul(Kk, self.H), self.Pk)
+        self.Pk = np.matmul(self.I - np.matmul(Kk, self.H), self.Pk)
     
-    def run_filter(self, Z):
+    def run_filter(self, Z, U):
         """Runs filter over Z.
         
         Applies the filtering process over Z and returns all errors and 
@@ -116,7 +144,9 @@ class KalmanFilter:
         ----------
         Z : numpy.array
             Observed variable
-            
+        U : numpy.array
+            Control-input vector.
+        
         Returns
         -------
         states : numpy.array
@@ -127,8 +157,8 @@ class KalmanFilter:
         states = np.zeros_like(Z)
         errors = np.zeros_like(Z)
         
-        for k, zk in enumerate(Z):
-            self.predict()
+        for k, (zk, uk) in enumerate(zip(Z, U)):
+            self.predict(uk)
             self.update(zk)
             
             states[k] = self.xk

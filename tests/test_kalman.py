@@ -41,15 +41,15 @@ def test_kalman():
     xk = np.array([[0]])
 
     B = np.array([[0]])
-    u = np.array([[0]])
+    U = np.zeros((len(Z), 1))
 
     Pk = np.array([[1]])
     H = np.array([[1]])
     Q = 0
     R = 0.1
 
-    kf = KalmanFilter(A=A, xk=xk, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
-    states, covariances = kf.run_filter(Z)
+    kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
+    states, covariances = kf.run_filter(Z, U)
 
     np.testing.assert_allclose(
         states, 

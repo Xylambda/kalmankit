@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.1.0] - 2021-01-13
+
+### Added
+
+- Added `I` attribute (Identity matrix).
+- Added `CI` with TravisCI.
+- Added formulas in doc for KalmanFilter class.
+
+### Changed
+
+- Updated `predict` method to receive the vector-control input value at time k.
+- Updated `test_kalman.py`.
+- Updated `README` with latest changes.
+
+### Fixed
+
+- Fixed vector-control input (U). Now it depends on k like Z.
+- Fixed minor typos in docs.
+
+
 ## [1.0.1] - 2021-01-10
 
 ### Added
