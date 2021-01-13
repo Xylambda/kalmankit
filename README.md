@@ -113,7 +113,7 @@ ax.set_xlabel("");
 
 You can also compute the `a posterior estimates` manually:
 ```python
-kf = KalmanFilter(A=A, xk=xk, B=B, u=u, Pk=Pk, H=H, Q=Q, R=R)
+kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
 
 states = np.zeros_like(Z)
 errors = np.zeros_like(Z)

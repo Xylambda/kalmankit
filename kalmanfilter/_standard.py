@@ -3,7 +3,7 @@ import numpy as np
 
 
 class KalmanFilter:
-    r"""Kalman filter.
+    """Kalman filter.
     
     Applies the Kalman filter algorithm. See 2nd and 3rd references to 
     understand notation.
@@ -14,19 +14,19 @@ class KalmanFilter:
     Predict step
     .. math::
 
-    \begin{matrix}
-        \hat{x}_{k}^{-} = A\hat{x}_{k-1}^{-} + B u_{k-1} \\ 
+    \\begin{matrix}
+        \\hat{x}_{k}^{-} = A \\hat{x}_{k-1}^{-} + B u_{k-1} \\ 
         P_{k}^{-} = AP_{k-1}A^{T} + Q
-    \end{matrix}
+    \\end{matrix}
 
     Update step
     .. math::
 
-    \begin{matrix}
+    \\begin{matrix}
         K_k = P_{k}^{-} H^{T} (H P_{k}^{-} H^{T} + R)^{-1} \\ 
-        \hat{x_{k}} = \hat{x}_{k}^{-} + K_k (z_k - H \hat{x}_{k}^{-})) \\ 
+        \\hat{x_{k}} = \\hat{x}_{k}^{-} + K_k (z_k - H \\hat{x}_{k}^{-})) \\ 
         P_k = (I - K_k H) P_{k}^{-}
-    \end{matrix}
+    \\end{matrix}
     
     Parameters
     ----------

@@ -6,8 +6,8 @@ kalmanfilter package
    :undoc-members:
    :show-inheritance:
 
-Subpackages
------------
+Submodules
+----------
 
 .. toctree::
    :maxdepth: 4

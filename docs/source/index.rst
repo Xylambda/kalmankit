@@ -1,10 +1,6 @@
-.. 'kalmanfilter' documentation master file, created by
-   sphinx-quickstart on Tue Jan 12 15:00:00:00 2021.
-   You can adapt this file completely to yout liking, but it should at least
-   contain the root `toctree` directive.
 
-KALMAN FILTER
-=============
+Welcome to Kalman Filter's documentation
+========================================
 General multidimensional implementation of the Kalman filter algorithm using 
 NumPy. The Kalman filter is an optimal estimation algorithm, and it is optimal 
 in the sense of reducing the expected squared error of the parameters.
