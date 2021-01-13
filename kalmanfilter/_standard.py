@@ -3,7 +3,7 @@ import numpy as np
 
 
 class KalmanFilter:
-    """Kalman filter.
+    r"""Kalman filter.
     
     Applies the Kalman filter algorithm. See 2nd and 3rd references to 
     understand notation.
