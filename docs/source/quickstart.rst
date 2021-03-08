@@ -8,22 +8,44 @@ The usage is pretty simple given that parameters are correct:
 
 .. code-block:: python
     
-    import os
     import numpy as np
     import pandas as pd
     import matplotlib.pyplot as plt
 
-    from pathlib import Path
     from kalmanfilter import KalmanFilter
 
 
-    DATA_PATH = Path(os.path.abspath('')).parent / "tests/data"
-
-    # read data
-    ibex = pd.read_pickle(DATA_PATH / "ibex35.pkl")
+    def generate_func(start, end, step, beta, var):
+        """
+        Generate a noisy sine wave function
+        
+        Parameters
+        ----------
+        start : int
+            Initial X value.
+        end : int
+            Final X value.
+        step : float or int
+            Space between values.
+        beta : float or int
+            Slope of the sine wave.
+        var : float or int
+            Noise variance.
+            
+        Returns
+        -------
+        Z : numpy.array
+            Noisy sine wave.
+        """
+        _space = np.arange(start=-10, stop=10, step=0.1)
+        _sin = np.sin(_space)
+    
+        return np.array(
+        [beta*x + var*np.random.randn() for x in range(len(_space))]
+        ) + _sin
 
     # set the parameters
-    Z = ibex['Close'].values
+    Z = generate_func(start=-10, end=10, step=0.1, beta=0.02, var=0.3)
     A = np.array([[1]])
     xk = np.array([[1]])
 
