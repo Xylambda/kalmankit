@@ -142,9 +142,9 @@ class KalmanFilter:
     def run_filter(self, Z, U):
         """Runs filter over Z.
         
-        Applies the filtering process over Z and returns all errors and 
-        covariances. That is: given Z, this functions apply the predict and
-        update feedback loop for each zk, where k is a timestamp.
+        Applies the filtering process over Z and U and returns all errors and 
+        covariances. That is: given Z and U, this functions apply the predict 
+        and update feedback loop for each zk, where k is a timestamp.
         
         Parameters
         ----------
