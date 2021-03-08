@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.2.0] - 2021-03-08
+
+### Changed
+
+- Updated `quickstart`.
+- Updated `README`.
+
+### Fixed
+
+- Fixed naming in tests.
+
+
 ## [1.1.1] - 2021-01-13
 
 ### Changed

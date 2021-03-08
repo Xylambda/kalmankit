@@ -1,9 +1,5 @@
 """ General implementation of Kalman filter algorithm using NumPy. """
 
-# relative subpackages import
-from . import _standard
-
-
 # filters
 from ._standard import KalmanFilter
 

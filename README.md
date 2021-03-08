@@ -60,28 +60,47 @@ pytest -v tests/
 ```
 
 ## Usage
-To make use of the Kalman filter, you only need to decide the value of the 
-different parameters. Let's apply the Kalman filter to extract the signal of 
-`Ibex 35` financial time series. This series was obtained using 
-[investpy](https://github.com/alvarobartt/investpy), but a `.pkl` file is 
-provided.
+In this example, we generate a noisy sine wave function function to test the
+Kalman filter library.
 ```python
-import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from pathlib import Path
 from kalmanfilter import KalmanFilter
 
 
-DATA_PATH = Path(os.path.abspath('')).parent / "tests/data"
-
-# read data
-ibex = pd.read_pickle(DATA_PATH / "ibex35.pkl")
+def generate_func(start, end, step, beta, var):
+    """
+    Generate a noisy sine wave function
+    
+    Parameters
+    ----------
+    start : int
+        Initial X value.
+    end : int
+        Final X value.
+    step : float or int
+        Space between values.
+    beta : float or int
+        Slope of the sine wave.
+    var : float or int
+        Noise variance.
+        
+    Returns
+    -------
+    Z : numpy.array
+        Noisy sine wave.
+    """
+    _space = np.arange(start=-10, stop=10, step=0.1)
+    _sin = np.sin(_space)
+   
+    return np.array(
+      [beta*x + var*np.random.randn() for x in range(len(_space))]
+    ) + _sin
 
 # set the parameters
-Z = ibex['Close'].values
+Z = generate_func(start=-10, end=10, step=0.1, beta=0.02, var=0.3)
 A = np.array([[1]])
 xk = np.array([[1]])
 
@@ -101,10 +120,16 @@ states, errors = kf.run_filter(Z, U)
 # plot results
 fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(17,8))
 
-ibex.plot(ax=ax)
-ax.plot(ibex.index, states)
-ax.legend(['IBEX 35', 'Filtered IBEX 35'])
-ax.set_title("Kalman States")
+ax.plot(Z)
+ax.plot(states)
+ax.legend(
+  ['Original', 'Filtered'],
+  bbox_to_anchor=[0.5, -0.13],
+  loc='center',
+  ncol=2,
+  prop={'size': 16}
+)
+ax.set_title("Kalman States", fontsize=22)
 ax.set_xlabel("");
 ```
 ![signal](img/signal.png)
