@@ -8,11 +8,11 @@ class KalmanFilter:
     The standard Kalman Filter uses a form of feedback-control loop of two
     stages to model dynamic linear systems of the form:
 
-    .. math:
+    .. math::
 
         x_{k} = A x_{k} + B u_{k} + q_{k}
 
-    .. math:
+    .. math::
         
         z_{k} = H x_{k} + r_{k}
 
