@@ -66,7 +66,6 @@ Kalman filter library.
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
 from kalmanfilter import KalmanFilter
 
 
@@ -94,10 +93,11 @@ def generate_func(start, end, step, beta, var):
     """
     _space = np.arange(start=-10, stop=10, step=0.1)
     _sin = np.sin(_space)
-   
+    
     return np.array(
-      [beta*x + var*np.random.randn() for x in range(len(_space))]
+      [beta * x + var * np.random.randn() for x in range(len(_space))]
     ) + _sin
+
 
 # set the parameters
 Z = generate_func(start=-10, end=10, step=0.1, beta=0.02, var=0.3)
