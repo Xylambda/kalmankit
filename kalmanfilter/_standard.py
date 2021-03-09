@@ -6,7 +6,15 @@ class KalmanFilter:
     """Applies the Kalman filter algorithm.
 
     The standard Kalman Filter uses a form of feedback-control loop of two
-    stages to model dynamic linear systems. 
+    stages to model dynamic linear systems of the form:
+
+    .. math:
+        x_{k} = A x_{k} + B u_{k} + q_{k}
+
+    .. math:
+        z_{k} = H x_{k} + r_{k}
+
+    with :math:`q_{k} \sim \mathcal{N}(0, Q)` and :math:`r_{k} \sim \mathcal{N}(0, R)`
     
     For each time step :math:`k`
 
@@ -27,7 +35,7 @@ class KalmanFilter:
 
     .. math::
 
-        \hat{x_{k}} = \hat{x}_{k}^{-} + K_k (z_k - H \hat{x}_{k}^{-})
+        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - H \hat{x}_{k}^{-})
         
     .. math::
         P_k = (I - K_k H) P_{k}^{-}
@@ -58,7 +66,7 @@ class KalmanFilter:
     state_size : int
         Dimensionality of the state (n).
     I : numpy.array
-        Identity matrix (n x n).
+        Identity matrix (n x n). This attribute is not accessible by the user.
         
     Returns
     -------
@@ -97,7 +105,7 @@ class KalmanFilter:
 
         # attributes
         self.state_size = self.xk.shape[0] # usually called 'n'
-        self.I = np.identity(self.state_size)
+        self.__I = np.identity(self.state_size)
 
     def predict(self, uk):
         """Predicts states and covariances.
@@ -111,10 +119,10 @@ class KalmanFilter:
             Control-input vector at time k.
         """        
         # project state ahead
-        self.xk = np.matmul(self.A, self.xk) + np.matmul(self.B, uk)
+        self.xk = self.A @ self.xk + self.B @ uk
         
         # project error covariance ahead
-        self.Pk = np.matmul(self.A, np.matmul(self.Pk, self.A.T) + self.Q)
+        self.Pk = self.A @ ((self.Pk @ self.A.T) + self.Q)
     
     def update(self, zk):
         """Updates states and covariances.
@@ -128,22 +136,22 @@ class KalmanFilter:
             Observed variable at time k.
         """
         # innovation (pre-fit residual) covariance
-        Sk = np.matmul(self.H, np.matmul(self.Pk, self.H.T)) + self.R
+        Sk = self.H @ (self.Pk @ self.H.T) + self.R
         
         # optimal kalman gain
-        Kk = np.matmul(self.Pk, np.matmul(self.H.T, np.linalg.inv(Sk)))
+        Kk = self.Pk @ (self.H.T @ np.linalg.inv(Sk))
         
         # update estimate via zk
-        self.xk = self.xk + np.matmul(Kk, zk - np.matmul(self.H, self.xk))
+        self.xk = self.xk + Kk @ (zk - self.H @ self.xk)
         
         # update error covariance
-        self.Pk = np.matmul(self.I - np.matmul(Kk, self.H), self.Pk)
+        self.Pk = (self.__I - Kk @ self.H) @ self.Pk
     
     def run_filter(self, Z, U):
         """Runs filter over Z.
         
         Applies the filtering process over Z and U and returns all errors and 
-        covariances. That is: given Z and U, this functions apply the predict 
+        covariances. That is: given Z and U, this function apply the predict 
         and update feedback loop for each zk, where k is a timestamp.
         
         Parameters
