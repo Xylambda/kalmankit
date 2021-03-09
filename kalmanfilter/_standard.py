@@ -9,9 +9,11 @@ class KalmanFilter:
     stages to model dynamic linear systems of the form:
 
     .. math:
+
         x_{k} = A x_{k} + B u_{k} + q_{k}
 
     .. math:
+        
         z_{k} = H x_{k} + r_{k}
 
     with :math:`q_{k} \sim \mathcal{N}(0, Q)` and :math:`r_{k} \sim \mathcal{N}(0, R)`
