@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.3.2] - 2021-04-23
+
+### Fixed
+
+- Fix naming in setup.
+
+### Changed
+- Update requirements to fix vulnerabilities.
+
+
 ## [1.3.0] - 2021-03-09
 
 ### Changed

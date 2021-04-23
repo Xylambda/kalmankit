@@ -3,7 +3,7 @@ import versioneer
 
 
 setup(
-    name='Kalman filter',
+    name='kalmanfilter',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description='General implementation of Kalman Filter algorithm',
