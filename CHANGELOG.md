@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.3.4] - 2021-04-27
+
+### Fixed
+
+- Fix missing `find_packages` in setup.py
+
+### Added
+
+- New requirements for examples.
+
+### Changes
+
+- Update `requirements.txt` by removing jupyter.
+- Update `setup.py` to remove jupyter.
+
 ## [1.3.3] - 2021-04-23
 
 ### Fixed
