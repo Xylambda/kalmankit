@@ -9,29 +9,13 @@
 [![doc](https://img.shields.io/badge/DOCS-documentation-blue.svg?style=for-the-badge)](https://xylambda.github.io/kalmanfilter/)
 
 General multidimensional implementation of the Kalman filter algorithm using 
-NumPy. The Kalman filter is an optimal estimation algorithm: it is optimal 
-in the sense of reducing the expected squared error of the parameters.
+NumPy. The Kalman filter is an optimal estimation algorithm: if the noises
+are gaussian and the dynamic system we are modeling is linear, the Kalman 
+filter will find the best possible solution.
 
 The Kalman filter estimates a process by using a form of feedback 
 control loop: time update (predict) and measurement update (correct/update).
 
-
-## Standard Kalman Filter
-The standard Kalman Filter (currently the only one supported) can be used to 
-model `dynamic linar systems`. It can be summarized by the following expressions:
-
-The prediction step:
-<p align="center">
-  <img src="img/predict.png">
-</p>
-
-The update step:
-<p align="center">
-  <img src="img/update.png">
-</p>
-
-Notice how the Kalman gain regulates the weight between the prediction of the
-hidden state and the real observation.
 
 ## Installation
 Normal user:
@@ -61,8 +45,8 @@ pytest -v tests/
 
 ## Usage
 The library provides 2 examples of usage:
-1. [Moving Average]()
-1. [Market Beta estimation]()
+1. [Moving Average](examples/moving_average.py)
+1. [Market Beta estimation](examples/market_bet.py)
 
 ## References
 * Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)
