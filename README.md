@@ -46,7 +46,7 @@ pytest -v tests/
 ## Usage
 The library provides 2 examples of usage:
 1. [Moving Average](examples/moving_average.py)
-1. [Market Beta estimation](examples/market_bet.py)
+1. [Market Beta estimation](examples/market_beta.py)
 
 ## References
 * Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)
