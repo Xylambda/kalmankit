@@ -1,0 +1,4 @@
+-r requirements.txt
+-r requirements-doc.txt
+
+pytest==5.0.1

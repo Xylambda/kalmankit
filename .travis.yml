@@ -1,0 +1,18 @@
+language: python
+install:
+  - travis_retry pip install -e . -r requirements-dev.txt
+  
+script:
+  - pytest -vvx tests/.
+
+after_success:
+  - make -C docs html
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  on:
+    branch: master  # the default branch name
+  local_dir: docs/build/html
