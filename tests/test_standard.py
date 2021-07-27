@@ -44,7 +44,7 @@ def test_kalman():
     U = np.zeros((len(Z), 1))
 
     Pk = np.array([[1]])
-    H = np.array([[1]])
+    H = np.expand_dims(np.ones((len(Z),1)), axis=1)
     Q = np.zeros((len(Z)))
     R = np.ones((len(Z))) * 0.1
 
