@@ -10,10 +10,9 @@ from kalmanfilter import KalmanFilter
 
 
 # -----------------------------------------------------------------------------
-# generate stock returns
-# Get returns from pricing data
-stock_x = np.random.normal(scale=0.01, size=2000)
-stock_y = np.random.normal(scale=0.01, size=2000)
+# generate stock returns using a t distribution
+stock_x = 0.01 * np.random.standard_t(df=30, size=2000)
+stock_y = 0.01 * np.random.standard_t(df=30, size=2000)
 
 # kalman settings
 Z = stock_y.copy()
