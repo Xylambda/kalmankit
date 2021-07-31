@@ -18,8 +18,8 @@
 
 # -- Project information -----------------------------------------------------
 project = 'kalmanfilter'
-copyright = '2021, Alejandro PÃ©rez'SanjuÃ¡n[D[D[D[D[D[D[-'
-author = 'Alejandro PÃ©rez'SanjuÃ¡n[D[D[D[D[D[D[-'
+copyright = '2021, Alejandro Pérez-Sanjuán'
+author = 'Alejandro Pérez-Sanjuán'
 
 # The short X.Y version
 # version = ''
@@ -83,7 +83,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "furo"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -196,7 +196,7 @@ from pathlib import Path
 SRC_DIR = str(Path(__file__).parent.parent.parent)
 sys.path.insert(0, SRC_DIR)
 autosummary_generate = True
-html_theme = 'sphinx_rtd_theme'
+html_theme = "furo"
 napoleon_use_param = False  # this does not seem to make much difference
 napoleon_use_rtype = False  # show argument name and return type in the same line
 napoleon_numpy_docstring = True  # the only allowed format for docstring is numpy style

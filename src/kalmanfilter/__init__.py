@@ -1,3 +1,5 @@
+""" Multidimensional implementation of the Kalman Filter algorithm. """
+
 from .standard import KalmanFilter
 from ._version import get_versions
 
