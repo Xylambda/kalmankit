@@ -2,20 +2,17 @@
   <img src="img/logo.png" width="700">
 </p>
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Xylambda/kalmanfilter?label=VERSION&style=for-the-badge)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Xylambda/kalmanfilter?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/Xylambda/kalmanfilter?style=for-the-badge)
-![Travis (.org)](https://img.shields.io/travis/xylambda/kalmanfilter?style=for-the-badge)
-[![doc](https://img.shields.io/badge/DOCS-documentation-blue.svg?style=for-the-badge)](https://xylambda.github.io/kalmanfilter/)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Xylambda/kalmanfilter?label=VERSION&style=badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Xylambda/kalmanfilter?style=badge)
+![GitHub issues](https://img.shields.io/github/issues/Xylambda/kalmanfilter?style=badge)
+![workflow](https://github.com/Xylambda/kalmanfilter/actions/workflows/cicd.yaml/badge.svg)
+[![doc](https://img.shields.io/badge/DOCS-documentation-blue.svg?style=badge)](https://xylambda.github.io/kalmanfilter/)
 
-General multidimensional implementation of the Kalman filter algorithm using 
-NumPy. The Kalman filter is an optimal estimation algorithm: if the noises
-are gaussian and the dynamic system we are modeling is linear, the Kalman 
-filter will find the best possible solution.
+The Kalman filter is an optimal estimation algorithm: it estimates the true state of a signal given that this signal
+is noisy and/or incomplete. If the noises are drawn from a gaussian distribution and the underlying system is governed
+by linear equations, the filter will output the best possible estimate of the signal's true state.
 
-The Kalman filter estimates a process by using a form of feedback 
-control loop: time update (predict) and measurement update (correct/update).
-
+This packages provides a multidimensional implementation of the standard Kalman filter algorithm using NumPy.
 
 ## Installation
 Normal user:
