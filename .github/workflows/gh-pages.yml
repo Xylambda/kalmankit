@@ -36,10 +36,15 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install -r ./requirements-dev.txt
 
-      - run: mkdocs build
+      - name: Build docs
+      - run: |
+        cd docs
+        make html
+        touch build/html/.nojekyll
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs/build/html # The folder the action should deploy.

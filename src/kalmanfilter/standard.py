@@ -110,7 +110,11 @@ class KalmanFilter:
         self.__I = np.identity(self.state_size)
 
     def predict(self, Ak, xk, Bk, uk, Pk, Qk):
-        """
+        """Predicts states and covariances.
+
+        Predict step of the Kalman filter. Computes the prior values of state 
+        and covariance using the previous timestep (if any).
+        
         Parameters
         ----------
         Ak : numpy.ndarray
@@ -142,7 +146,11 @@ class KalmanFilter:
         return xk_prior, Pk_prior
     
     def update(self, Hk, xk, Pk, zk, Rk):
-        """
+        """Updates states and covariances.
+
+        Update step of the Kalman filter. That is, the filter combines the 
+        predictions with the observed variable :math:`Z` at time :math:`k`.
+
         Parameters
         ----------
         Hk : numpy.ndarray
@@ -180,9 +188,10 @@ class KalmanFilter:
     def run_filter(self, Z, U):
         """Run filter over Z and U.
         
-        Applies the filtering process over Z and U and returns all errors and 
-        covariances. That is: given Z and U, this function apply the predict 
-        and update feedback loop for each zk, where k is a timestamp.
+        Applies the filtering process over :math:`Z` and U and returns all 
+        errors and covariances. That is: given :math:`Z` and :math:`U`, this 
+        function apply the predict and update feedback loop for each 
+        :math:`zk`, where :math:`k` is a timestamp.
         
         Parameters
         ----------
@@ -194,9 +203,10 @@ class KalmanFilter:
         Returns
         -------
         states : numpy.ndarray
-            A posteriori state estimates for each time step k.
+            A posteriori state estimates for each time step :math:`k`.
         errors : numpy.ndarray
-            A posteriori estimate error covariances for each time step k. 
+            A posteriori estimate error covariances for each time step 
+            :math:`k`.
         """
         states = np.zeros_like(Z)
         errors = np.zeros_like(Z)
@@ -205,10 +215,10 @@ class KalmanFilter:
         xk = self.xk
         Pk = self.Pk
         
-        iterable = zip(self.A, self.H, self.B, U, Z, self.Q, self.R)
-
-        for k, (Ak, Hk, Bk, uk, zk, Qk, Rk) in enumerate(iterable):
-            # predict step
+        # feedback-control loop
+        _iterable = zip(self.A, self.H, self.B, U, Z, self.Q, self.R)
+        for k, (Ak, Hk, Bk, uk, zk, Qk, Rk) in enumerate(_iterable):
+            # predict step, get prior estimates
             xk_prior, Pk_prior = self.predict(
                 Ak=Ak,
                 xk=xk,
@@ -231,7 +241,7 @@ class KalmanFilter:
             errors[k] = Pk_posterior
 
             # update estimates for the next iteration
-            xk = xk_posterior.copy()
-            Pk = Pk_posterior.copy()
+            xk = xk_posterior
+            Pk = Pk_posterior
             
         return states, errors

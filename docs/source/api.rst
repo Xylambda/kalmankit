@@ -8,3 +8,5 @@ API reference
 
 .. autosummary::
    :toctree: _autosummary
+
+   kalmanfilter.standard
