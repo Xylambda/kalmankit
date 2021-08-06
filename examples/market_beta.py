@@ -3,6 +3,8 @@ By setting the observation matrix H to be one of the stocks (stock_x) and the
 observed variable Z (stock_y) to be the other, the Kalman Filter will compute 
 the beta between both stocks, adapting dynamically to changing conditions.
 
+Note: in this configuration, the `alpha` is being ignored.
+
 See:
 [1] Quantdare - The Kalman Filter:
 https://quantdare.com/the-kalman-filter/
@@ -30,7 +32,7 @@ if __name__ == "__main__":
     U = np.zeros((len(Z), 1)) # control-input vector
 
     Pk = np.array([[1]]) # initial covariance estimate
-    Q = np.ones((len(Z))) * 0.005 # measurement noise covariance
+    Q = np.ones((len(Z))) * 0.005 # process noise covariance
 
     H = np.expand_dims(stock_x.reshape(-1,1), axis=1) # observation matrix
     R = np.ones((len(Z))) * 0.01 # measurement noise covariance

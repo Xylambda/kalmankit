@@ -36,6 +36,7 @@
 MANIFEST
 __pycache__/
 build/
+.vscode/
 celerybeat-schedule
 coverage.xml
 develop-eggs/

@@ -37,10 +37,10 @@ jobs:
         run: python3 -m pip install -r ./requirements-dev.txt
 
       - name: Build docs
-      - run: |
-        cd docs
-        make html
-        touch build/html/.nojekyll
+        run: |
+          cd docs
+          make html
+          touch build/html/.nojekyll
 
       - name: Deploy docs
         uses: JamesIves/github-pages-deploy-action@releases/v3
