@@ -48,16 +48,16 @@ class KalmanFilter:
     ----------
     A : numpy.ndarray
         Transition matrix. A matrix that relates the state at the previous time 
-        step k-1 to the state at the current step k.
+        step k-1 to the state at the current step :math:`k`.
     xk : numpy.ndarray
-        Initial (k=0) mean estimate.
+        Initial (:math:`k=0`) mean estimate.
     B : numpy.ndarray
         Control-input matrix.
     Pk : numpy.ndarray
-        Initial (k=0) covariance estimate.
+        Initial (:math:`k=0`) covariance estimate.
     H : numpy.ndarray
         Observation matrix. A matrix that relates the state to the measurement 
-        zk.
+        :math:`z_{k}`.
     Q : numpy.ndarray
         Process noise covariance.
     R : numpy.ndarray or float.
@@ -66,9 +66,10 @@ class KalmanFilter:
     Attributes
     ----------
     state_size : int
-        Dimensionality of the state (n).
+        Dimensionality of the state :math:`(n)`.
     I : numpy.ndarray
-        Identity matrix (n x n). This attribute is not accessible by the user.
+        Identity matrix :math:`(n x n)`. This attribute is not accessible by 
+        the user.
         
     Returns
     -------
@@ -96,7 +97,15 @@ class KalmanFilter:
        https://aircconline.com/ijcses/V8N1/8117ijcses01.pdf
     
     """
-    def __init__(self, A, xk, B, Pk, H, Q, R):
+    def __init__(
+        self, A: np.ndarray,
+        xk: np.ndarray,
+        B: np.ndarray,
+        Pk: np.ndarray,
+        H: np.ndarray,
+        Q: np.ndarray,
+        R: np.ndarray
+    ):
         self.A = A
         self.xk = xk
         self.B = B
@@ -109,7 +118,15 @@ class KalmanFilter:
         self.state_size = self.xk.shape[0] # usually called 'n'
         self.__I = np.identity(self.state_size)
 
-    def predict(self, Ak, xk, Bk, uk, Pk, Qk):
+    def predict(
+        self,
+        Ak: np.ndarray,
+        xk: np.ndarray,
+        Bk: np.ndarray,
+        uk: np.ndarray,
+        Pk: np.ndarray,
+        Qk: np.ndarray
+    ):
         """Predicts states and covariances.
 
         Predict step of the Kalman filter. Computes the prior values of state 
@@ -145,7 +162,14 @@ class KalmanFilter:
         
         return xk_prior, Pk_prior
     
-    def update(self, Hk, xk, Pk, zk, Rk):
+    def update(
+        self,
+        Hk: np.ndarray,
+        xk: np.ndarray,
+        Pk: np.ndarray,
+        zk: np.ndarray,
+        Rk:np.ndarray
+    ):
         """Updates states and covariances.
 
         Update step of the Kalman filter. That is, the filter combines the 
@@ -185,12 +209,16 @@ class KalmanFilter:
         
         return xk_posterior, Pk_posterior
     
-    def run_filter(self, Z, U):
+    def run_filter(
+        self,
+        Z: np.ndarray,
+        U: np.ndarray
+    ):
         """Run filter over Z and U.
         
-        Applies the filtering process over :math:`Z` and U and returns all 
-        errors and covariances. That is: given :math:`Z` and :math:`U`, this 
-        function apply the predict and update feedback loop for each 
+        Applies the filtering process over :math:`Z` and :math:`U` and returns 
+        all errors and covariances. That is: given :math:`Z` and :math:`U`, 
+        this function apply the predict and update feedback loop for each 
         :math:`zk`, where :math:`k` is a timestamp.
         
         Parameters

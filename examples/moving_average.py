@@ -59,7 +59,7 @@ if __name__ == "__main__":
     U = np.zeros((len(Z), 1)) # control-input vector
 
     Pk = np.array([[1]]) # initial covariance estimate
-    Q = np.ones((len(Z))) * 0.005 # measurement noise covariance
+    Q = np.ones((len(Z))) * 0.005 # process noise covariance
 
     H = A.copy() # observation matrix
     R = np.ones((len(Z))) * 0.01 # measurement noise covariance
