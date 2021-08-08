@@ -1,9 +1,10 @@
 """ Vanilla implementation of the standard Kalman filter algorithm"""
 import numpy as np
+from typing import List, Tuple
 
 
 class KalmanFilter:
-    """Applies the Kalman filter algorithm.
+    """Standard Kalman filter algorithm.
 
     The standard Kalman Filter uses a form of feedback-control loop of two
     stages to model dynamic linear systems of the form:
@@ -59,9 +60,9 @@ class KalmanFilter:
         Observation matrix. A matrix that relates the state to the measurement 
         :math:`z_{k}`.
     Q : numpy.ndarray
-        Process noise covariance.
+        Process noise covariance (transition covariance).
     R : numpy.ndarray or float.
-        Measurement noise covariance.
+        Measurement noise covariance (observation covariance).
 
     Attributes
     ----------
@@ -70,6 +71,8 @@ class KalmanFilter:
     I : numpy.ndarray
         Identity matrix :math:`(n x n)`. This attribute is not accessible by 
         the user.
+    kalman_gains : list of numpy.ndarray
+        The list of computed Kalman gains.
         
     Returns
     -------
@@ -96,6 +99,10 @@ class KalmanFilter:
        Filtering Tutorial for Undergraduate students.
        https://aircconline.com/ijcses/V8N1/8117ijcses01.pdf
     
+    Warning
+    -------
+    Please, take your time to ensure the matrices shapes are correct or the 
+    filter will not work properly.
     """
     def __init__(
         self, A: np.ndarray,
@@ -117,6 +124,7 @@ class KalmanFilter:
         # attributes
         self.state_size = self.xk.shape[0] # usually called 'n'
         self.__I = np.identity(self.state_size)
+        self.kalman_gains = []
 
     def predict(
         self,
@@ -126,7 +134,7 @@ class KalmanFilter:
         uk: np.ndarray,
         Pk: np.ndarray,
         Qk: np.ndarray
-    ):
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Predicts states and covariances.
 
         Predict step of the Kalman filter. Computes the prior values of state 
@@ -169,7 +177,7 @@ class KalmanFilter:
         Pk: np.ndarray,
         zk: np.ndarray,
         Rk:np.ndarray
-    ):
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Updates states and covariances.
 
         Update step of the Kalman filter. That is, the filter combines the 
@@ -200,7 +208,8 @@ class KalmanFilter:
         
         # optimal kalman gain
         Kk = Pk @ (Hk.T @ np.linalg.inv(Sk))
-        
+        self.kalman_gains.append(Kk)
+
         # update estimate via zk
         xk_posterior = xk + Kk @ (zk - Hk @ xk)
         
@@ -209,16 +218,16 @@ class KalmanFilter:
         
         return xk_posterior, Pk_posterior
     
-    def run_filter(
+    def filter(
         self,
         Z: np.ndarray,
         U: np.ndarray
-    ):
+    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """Run filter over Z and U.
         
         Applies the filtering process over :math:`Z` and :math:`U` and returns 
         all errors and covariances. That is: given :math:`Z` and :math:`U`, 
-        this function apply the predict and update feedback loop for each 
+        this function applies the predict and update feedback loop for each 
         :math:`zk`, where :math:`k` is a timestamp.
         
         Parameters
@@ -230,14 +239,14 @@ class KalmanFilter:
             
         Returns
         -------
-        states : numpy.ndarray
+        states : list of numpy.ndarray
             A posteriori state estimates for each time step :math:`k`.
-        errors : numpy.ndarray
+        errors : list of numpy.ndarray
             A posteriori estimate error covariances for each time step 
             :math:`k`.
         """
-        states = np.zeros_like(Z)
-        errors = np.zeros_like(Z)
+        states = []
+        errors = []
         
         # get initial conditions
         xk = self.xk
@@ -265,8 +274,8 @@ class KalmanFilter:
                 Rk=Rk
             )
 
-            states[k] = xk_posterior
-            errors[k] = Pk_posterior
+            states.append(xk_posterior)
+            errors.append(Pk_posterior)
 
             # update estimates for the next iteration
             xk = xk_posterior

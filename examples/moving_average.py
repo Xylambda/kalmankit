@@ -67,10 +67,23 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------------
     # run Kalman filter
     kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
-    states, errors = kf.run_filter(Z=Z, U=U)
+    states, errors = kf.filter(Z=Z, U=U)
+    kalman_gain = np.stack([val.item() for val in kf.kalman_gains])
+
+    # as a flat array
+    states = np.stack([val.item() for val in states])
+    errors = np.stack([val.item() for val in errors])
 
     # plot
-    plt.figure(figsize=(15,7))
-    plt.plot(Z)
-    plt.plot(states)
+    fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(15,4))
+    ax[0].plot(Z)
+    ax[0].plot(states)
+    ax[0].set_title('Estimated means over signal')
+
+    ax[1].plot(errors)
+    ax[1].set_title('Covariances')
+
+    ax[2].plot(kalman_gain)
+    ax[2].set_title('Kalman Gain')
+
     plt.show()

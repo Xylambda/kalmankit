@@ -49,7 +49,10 @@ def test_kalman():
     R = np.ones((len(Z))) * 0.1
 
     kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
-    states, covariances = kf.run_filter(Z=Z, U=U)
+    states, covariances = kf.filter(Z=Z, U=U)
+
+    states = np.stack([val.item() for val in states])
+    covariances = np.stack([val.item() for val in covariances])
 
     np.testing.assert_allclose(
         states, 
