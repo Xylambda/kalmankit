@@ -3,7 +3,8 @@ By setting the observation matrix H to be one of the stocks (stock_x) and the
 observed variable Z (stock_y) to be the other, the Kalman Filter will compute 
 the beta between both stocks, adapting dynamically to changing conditions.
 
-Note: in this configuration, the `alpha` is being ignored.
+Notice how we added ones to the observation matrix to account for the intercept
+or alpha.
 
 See:
 [1] Quantdare - The Kalman Filter:
@@ -25,30 +26,42 @@ if __name__ == "__main__":
 
     # kalman settings
     Z = stock_y.copy()
-    A = np.expand_dims(np.ones((len(Z),1)), axis=1) # transition matrix
-    xk = np.array([[0]]) # initial mean estimate
+    U = np.zeros((len(Z), 2, 1)) # control-input vector
 
-    B = np.expand_dims(np.zeros((len(Z),1)), axis=1) # control-input matrix
-    U = np.zeros((len(Z), 1)) # control-input vector
+    A = np.array([np.eye(2)] * len(Z))
+    B = np.zeros((len(Z), 2, 2))
+    H = np.expand_dims(np.vstack([[stock_x], [np.ones(len(stock_x))]]).T, axis=1)
 
-    Pk = np.array([[1]]) # initial covariance estimate
-    Q = np.ones((len(Z))) * 0.005 # process noise covariance
+    xk = np.array([0, 0])
+    Pk = np.ones((2, 2))
 
-    H = np.expand_dims(stock_x.reshape(-1,1), axis=1) # observation matrix
-    R = np.ones((len(Z))) * 0.01 # measurement noise covariance
+    Q = np.array([0.01 * np.eye(2)] * len(Z)) # process noise / transition covariance
+    R = np.ones((len(Z))) * 0.01 # measurement noise / observation covariance
 
     # -------------------------------------------------------------------------
     # run Kalman filter
     kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
-    states, errors = kf.run_filter(Z=Z, U=U)
+    states, errors = kf.filter(Z=Z, U=U)
+    kalman_gain = np.stack([gain.T[0] for gain in kf.kalman_gains])
+
+    # as flat array
+    states = np.stack([val[:, 0] for val in states])
+    errors = np.stack([val[:, 0] for val in errors])
 
     # -------------------------------------------------------------------------
-    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15,5))
+    fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(15, 4))
 
-    ax[0].plot(states)
-    ax[0].set_title('Beta estimated means')
+    ax[0][0].plot(states[:, 0])
+    ax[0][0].set_title('Estimated means (beta)')
 
-    ax[1].plot(errors)
-    ax[1].set_title('Beta estimated covariances')
+    ax[1][0].plot(states[:, 1])
+    ax[1][0].set_title('Estimated means (alpha / intercept)')
 
+    ax[0][1].plot(errors[:, 0])
+    ax[0][1].set_title('Estimated covariances (beta)')
+
+    ax[1][1].plot(errors[:, 1])
+    ax[1][1].set_title('Estimated covariances (alpha / intercept)')
+
+    plt.tight_layout()
     plt.show()

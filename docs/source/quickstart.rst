@@ -103,10 +103,10 @@ the parameters
 
 >>> kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
 
-Then, we can call `run_filter` to filter the signal and the object will take 
+Then, we can call `filter` to filter the signal and the object will take 
 care of the feedback-control loop.
 
->>> states, errors = kf.run_filter(Z=Z, U=U)
+>>> states, errors = kf.filter(Z=Z, U=U)
 
 You can use Matplotlib to visualize the results, though you may need to adapt 
 the shapes.
