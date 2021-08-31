@@ -70,7 +70,7 @@ if __name__ == "__main__":
     states, errors = kf.filter(Z=Z, U=U)
     kalman_gain = np.stack([val.item() for val in kf.kalman_gains])
 
-    # as a flat array
+    # as array
     states = np.stack([val.item() for val in states])
     errors = np.stack([val.item() for val in errors])
 

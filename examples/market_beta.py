@@ -44,7 +44,7 @@ if __name__ == "__main__":
     states, errors = kf.filter(Z=Z, U=U)
     kalman_gain = np.stack([gain.T[0] for gain in kf.kalman_gains])
 
-    # as flat array
+    # as array
     states = np.stack([val[:, 0] for val in states])
     errors = np.stack([val[:, 0] for val in errors])
 

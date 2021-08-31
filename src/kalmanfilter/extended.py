@@ -1,4 +1,4 @@
-""" Vanilla implementation of the standard Kalman filter algorithm"""
+""" Implementation of the extended Kalman filter algorithm"""
 import numpy as np
 from typing import Tuple, List, Callable
 
@@ -67,18 +67,17 @@ class ExtendedKalmanFilter:
         Non-linear state transition function. It is a nonlinear function that 
         relates the state at the previous time step :math:`k-1` to state at the 
         current step :math:`k`. It must receive two arguments: :math:`xk` and 
-        :math:`uk`, which are the state and and the control-input at time 
-        :math:`k`, respectively.
+        :math:`uk`, which are the state and the control-input.
     h : function
         Non-linear observation function. It is a nonlinear function that 
         relates the prior state :math:`xk` to the measurement :math:`zk`. It 
         must receive one argument: :math:`xk`.
     jacobian_A : function
         The function that computes the jacobian of :math:`f` with respect to 
-        :math:`x`.
+        :math:`x`. It must receive two arguments: :math:`x` and :math:`u`.
     jacobian_H : function
         The function that computes the jacobian of :math:`h` with respect to 
-        :math:`x`.
+        :math:`x`. It must receive one argument: :math:`x`.
 
     Attributes
     ----------
@@ -172,8 +171,8 @@ class ExtendedKalmanFilter:
         Pk_prior : numpy.ndarray
             Prior value of state covariance.
         """
-        # jacobian of f with respect to x evaluated on xk
-        Ak = self.jacobian_A(xk)
+        # jacobian of f with respect to x evaluated at xk
+        Ak = self.jacobian_A(xk, uk)
 
         # project state ahead
         xk_prior = self.f(xk, uk)
@@ -213,7 +212,7 @@ class ExtendedKalmanFilter:
         Pk_posterior : numpy.ndarray
             A posteriori estimate error covariance at time :math:`k`.
         """
-        # jacobian of h with respect to x evaluated on xk
+        # jacobian of h with respect to x evaluated at xk
         Hk = self.jacobian_H(xk)
 
         # innovation (pre-fit residual) covariance

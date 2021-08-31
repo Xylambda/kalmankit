@@ -8,11 +8,17 @@
 ![workflow](https://github.com/Xylambda/kalmanfilter/actions/workflows/cicd.yaml/badge.svg)
 [![doc](https://img.shields.io/badge/DOCS-documentation-blue.svg?style=badge)](https://xylambda.github.io/kalmanfilter/)
 
-The Kalman filter is an optimal estimation algorithm: it estimates the true state of a signal given that this signal
-is noisy and/or incomplete. If the noises are drawn from a gaussian distribution and the underlying system is governed
-by linear equations, the filter will output the best possible estimate of the signal's true state.
+The Kalman filter is an optimal estimation algorithm: it estimates the true 
+state of a signal given that this signal is noisy and/or incomplete. This 
+package provides a multidimensional implementation of:
+* **Standard Kalman Filter**: if the noises are drawn from a gaussian 
+distribution and the underlying system is governed by linear equations, the 
+filter will output the best possible estimate of the signal's true state.
 
-This packages provides a multidimensional implementation of the standard Kalman filter algorithm using NumPy.
+* **Extended Kalman Filter**: can deal with nonlinear systems, but it does not
+output the optimal estimate. It works by linearizing the function locally using
+the Jacobian matrix.
+
 
 ## Installation
 Normal user:
@@ -41,9 +47,14 @@ pytest -v tests/
 ```
 
 ## Usage
-The library provides 2 examples of usage:
+The library provides 3 examples of usage:
 1. [Moving Average](examples/moving_average.py)
-1. [Market Beta estimation](examples/market_beta.py)
+2. [Market Beta estimation](examples/market_beta.py)
+3. [Extended Kalman Filter](examples/extended.py)
+
+Take into account that the examples have specific requirements, like 
+`Matplotlib` or `autograd`. A `requirements-example.txt` is provided to install
+these dependencies.
 
 ## References
 * Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)

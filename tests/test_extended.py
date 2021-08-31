@@ -54,7 +54,7 @@ def test_extended_equal_to_standard():
         return xk
 
     # define jacobian matrices
-    def jacobian_A(x):
+    def jacobian_A(x, u=None):
         return np.array([[1]])
 
     def jacobian_H(x):
