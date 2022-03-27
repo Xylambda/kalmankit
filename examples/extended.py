@@ -10,10 +10,8 @@ zk = h(xk) + rk
 
 Then, we set the parameters, and the jacobian matrices.
 """
-import autograd.numpy as np
+import numpy as np
 import matplotlib.pyplot as plt
-
-from autograd import jacobian
 from kalmanfilter import ExtendedKalmanFilter
 
 
@@ -38,32 +36,32 @@ if __name__ == "__main__":
     # define functions and jacobian matrices
     def f(xk: np.ndarray, uk: np.ndarray) -> np.ndarray:
         """
-        State-transition function.
+        State-transition non-linear function.
         """
         return np.sin(xk) + uk
 
 
     def h(xk: np.ndarray) -> np.ndarray:
         """
-        Observation function.
+        Observation non-linear function.
         """
         return np.tan(xk)
 
 
     def jacobian_A(x: np.ndarray, u: np.ndarray) -> np.ndarray:
         """
-        Jacobian of f respect to x.
+        Jacobian of f with respect to x.
         """
-        jac = jacobian(f)
-        return jac(x, u)
+        jac = np.cos(x)
+        return jac
 
 
     def jacobian_H(x: np.ndarray) -> np.ndarray:
         """
-        Jacobian of h respect to x.
+        Jacobian of h with respect to x.
         """
-        jac = jacobian(h)
-        return jac(x)
+        jac = np.arccos(x) ** 2
+        return jac
 
     # -------------------------------------------------------------------------
     # kalman settings
