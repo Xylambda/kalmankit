@@ -17,8 +17,9 @@ class ExtendedKalmanFilter:
 
         z_{k} = h(x_{k}) + r_{k}
 
-    with :math:`q_{k} \sim \mathcal{N}(0, Q)`, :math:`r_{k} \sim \mathcal{N}(0, R)`
-    and :math:`f` and :math:`h` being nonlinear functions.
+    with :math:`q_{k} \sim \mathcal{N}(0, Q)`,
+    :math:`r_{k} \sim \mathcal{N}(0, R)` and :math:`f` and :math:`h` being
+    nonlinear functions.
 
     For each time step :math:`k`
 
@@ -31,7 +32,8 @@ class ExtendedKalmanFilter:
     .. math::
         P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
 
-    with :math:`A_{k} = \frac{\partial f}{x}` evaluated at :math:`\hat{x}_{k-1}^{-}`.
+    with :math:`A_{k} = \frac{\partial f}{x}` evaluated at
+    :math:`\hat{x}_{k-1}^{-}`.
 
     2. Update step
 
@@ -46,7 +48,8 @@ class ExtendedKalmanFilter:
     .. math::
         P_k = (I - K_k H) P_{k}^{-}
 
-    with :math:`H_{k} = \frac{\partial h}{x}` evaluated at :math:`\hat{x}_{k}^{-}`.
+    with :math:`H_{k} = \frac{\partial h}{x}` evaluated at
+    :math:`\hat{x}_{k}^{-}`.
 
     The Extended Kalman Filter can deal with non-linear systems but it is not
     optimal, unless the system is linear and the noises are drawn from a normal

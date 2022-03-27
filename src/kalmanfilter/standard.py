@@ -4,7 +4,7 @@ from typing import Tuple, List
 
 
 class KalmanFilter:
-    """Standard Kalman filter algorithm.
+    r"""Standard Kalman filter algorithm.
 
     The standard Kalman Filter uses a form of feedback-control loop of two
     stages to model dynamic linear systems of the form:
@@ -17,7 +17,8 @@ class KalmanFilter:
 
         z_{k} = H x_{k} + r_{k}
 
-    with :math:`q_{k} \sim \mathcal{N}(0, Q)` and :math:`r_{k} \sim \mathcal{N}(0, R)`
+    with :math:`q_{k} \sim \mathcal{N}(0, Q)` and
+    :math:`r_{k} \sim \mathcal{N}(0, R)`
 
     For each time step :math:`k`
 
