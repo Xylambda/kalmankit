@@ -143,7 +143,7 @@ class ExtendedKalmanFilter:
         # attributes
         self.state_size = self.xk.shape[0]  # usually called 'n'
         self.__I = np.identity(self.state_size)
-        self.kalman_gains = []
+        self.kalman_gains: List[np.ndarray] = []
 
     def predict(
         self, xk: np.ndarray, uk: np.ndarray, Pk: np.ndarray, Qk: np.ndarray
