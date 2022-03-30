@@ -10,3 +10,4 @@ API reference
    :toctree: _autosummary
 
    kalmanfilter.standard
+   kalmanfilter.extended

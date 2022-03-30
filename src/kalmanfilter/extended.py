@@ -1,24 +1,25 @@
-""" Vanilla implementation of the standard Kalman filter algorithm"""
+""" Implementation of the extended Kalman filter algorithm"""
 import numpy as np
-from typing import Tuple, List
+from typing import Tuple, List, Callable
 
 
-class KalmanFilter:
-    r"""Standard Kalman filter algorithm.
+class ExtendedKalmanFilter:
+    r"""Extended Kalman filter algorithm.
 
-    The standard Kalman Filter uses a form of feedback-control loop of two
-    stages to model dynamic linear systems of the form:
-
-    .. math::
-
-        x_{k} = A x_{k} + B u_{k} + q_{k}
+    The Extended Kalman Filter uses a form of feedback-control loop of two
+    stages to model dynamic non-linear systems of the form:
 
     .. math::
 
-        z_{k} = H x_{k} + r_{k}
+        x_{k} = f(x_{k-1}, u_{k-1}) + q_{k}
 
-    with :math:`q_{k} \sim \mathcal{N}(0, Q)` and
-    :math:`r_{k} \sim \mathcal{N}(0, R)`
+    .. math::
+
+        z_{k} = h(x_{k}) + r_{k}
+
+    with :math:`q_{k} \sim \mathcal{N}(0, Q)`,
+    :math:`r_{k} \sim \mathcal{N}(0, R)` and :math:`f` and :math:`h` being
+    nonlinear functions.
 
     For each time step :math:`k`
 
@@ -26,10 +27,13 @@ class KalmanFilter:
 
     .. math::
 
-        \hat{x}_{k}^{-} = A_{k} \hat{x}_{k-1}^{-} + B_{k} u_{k-1}
+        \hat{x}_{k}^{-} = f(\hat{x}_{k-1}^{-}, u_{k-1})
 
     .. math::
         P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
+
+    with :math:`A_{k} = \frac{\partial f}{x}` evaluated at
+    :math:`\hat{x}_{k-1}^{-}`.
 
     2. Update step
 
@@ -39,31 +43,44 @@ class KalmanFilter:
 
     .. math::
 
-        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - H_{k} \hat{x}_{k}^{-})
+        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - h(\hat{x}_{k}^{-}))
 
     .. math::
         P_k = (I - K_k H) P_{k}^{-}
 
-    See 2nd and 3rd references to understand notation.
+    with :math:`H_{k} = \frac{\partial h}{x}` evaluated at
+    :math:`\hat{x}_{k}^{-}`.
+
+    The Extended Kalman Filter can deal with non-linear systems but it is not
+    optimal, unless the system is linear and the noises are drawn from a normal
+    distribution, which will cause the Extended Kalman Filter to behave as a
+    standard Kalman Filter.
 
     Parameters
     ----------
-    A : numpy.ndarray
-        Transition matrix. A matrix that relates the state at the previous time
-        step :math:`k-1` to the state at the current step :math:`k`.
     xk : numpy.ndarray
         Initial (:math:`k=0`) mean estimate.
-    B : numpy.ndarray
-        Control-input matrix.
     Pk : numpy.ndarray
         Initial (:math:`k=0`) covariance estimate.
-    H : numpy.ndarray
-        Observation matrix. A matrix that relates the prior state :math:`xk` to
-        the measurement :math:`z_{k}`.
     Q : numpy.ndarray
         Process noise covariance (transition covariance).
     R : numpy.ndarray or float.
         Measurement noise covariance (observation covariance).
+    f : function
+        Non-linear state transition function. It is a nonlinear function that
+        relates the state at the previous time step :math:`k-1` to state at the
+        current step :math:`k`. It must receive two arguments: :math:`xk` and
+        :math:`uk`, which are the state and the control-input.
+    h : function
+        Non-linear observation function. It is a nonlinear function that
+        relates the prior state :math:`xk` to the measurement :math:`zk`. It
+        must receive one argument: :math:`xk`.
+    jacobian_A : function
+        The function that computes the jacobian of :math:`f` with respect to
+        :math:`x`. It must receive two arguments: :math:`x` and :math:`u`.
+    jacobian_H : function
+        The function that computes the jacobian of :math:`h` with respect to
+        :math:`x`. It must receive one argument: :math:`x`.
 
     Attributes
     ----------
@@ -87,16 +104,13 @@ class KalmanFilter:
     .. [1] Matlab - Understanding Kalman Filters:
        https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr
 
-    .. [2] Bilgin's Blog - Kalman filter for dummies.
-       http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies
-
-    .. [3] Greg Welch, Gary Bishop - An Introduction to the Kalman Filter:
+    .. [2] Greg Welch, Gary Bishop - An Introduction to the Kalman Filter:
        https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf
 
-    .. [4] Tucker McClure - How Kalman Filters Work, Part 1.
+    .. [3] Tucker McClure - How Kalman Filters Work, Part 1.
        http://www.anuncommonlab.com/articles/how-kalman-filters-work/
 
-    .. [5] Matthew B. Rhudy, Roger A. Salguero and Keaton Holappa - A Kalman
+    .. [4] Matthew B. Rhudy, Roger A. Salguero and Keaton Holappa - A Kalman
        Filtering Tutorial for Undergraduate students.
        https://aircconline.com/ijcses/V8N1/8117ijcses01.pdf
 
@@ -108,19 +122,21 @@ class KalmanFilter:
 
     def __init__(
         self,
-        A: np.ndarray,
         xk: np.ndarray,
-        B: np.ndarray,
         Pk: np.ndarray,
-        H: np.ndarray,
         Q: np.ndarray,
         R: np.ndarray,
+        f: Callable,
+        h: Callable,
+        jacobian_A: Callable,
+        jacobian_H: Callable,
     ):
-        self.A = A
+        self.f = f
+        self.jacobian_A = jacobian_A
         self.xk = xk
-        self.B = B
         self.Pk = Pk
-        self.H = H
+        self.h = h
+        self.jacobian_H = jacobian_H
         self.Q = Q
         self.R = R
 
@@ -130,13 +146,7 @@ class KalmanFilter:
         self.kalman_gains: List[np.ndarray] = []
 
     def predict(
-        self,
-        Ak: np.ndarray,
-        xk: np.ndarray,
-        Bk: np.ndarray,
-        uk: np.ndarray,
-        Pk: np.ndarray,
-        Qk: np.ndarray,
+        self, xk: np.ndarray, uk: np.ndarray, Pk: np.ndarray, Qk: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
         """Predicts states and covariances.
 
@@ -145,16 +155,10 @@ class KalmanFilter:
 
         Parameters
         ----------
-        Ak : numpy.ndarray
-            Transition matrix at time :math:`k`.
         xk : numpy.ndarray
             Mean estimate at time :math:`k`.
-        Bk : numpy.ndarray
-            Control-input matrix at time :math:`k`. Can be set to None to
-            ignore the control part of the filter.
         uk : numpy.ndarray
-            Control-input vector at time :math:`k`. Can be set to None to
-            ignore the control part of the filter.
+            Control-input vector at time :math:`k`.
         Pk : numpy.ndarray
             Covariance estimate at time :math:`k`.
         Qk : numpy.ndarray
@@ -167,11 +171,11 @@ class KalmanFilter:
         Pk_prior : numpy.ndarray
             Prior value of state covariance.
         """
+        # jacobian of f with respect to x evaluated at xk
+        Ak = self.jacobian_A(xk, uk)
+
         # project state ahead
-        if Bk is None or uk is None:
-            xk_prior = Ak @ xk
-        else:
-            xk_prior = Ak @ xk + Bk @ uk
+        xk_prior = self.f(xk, uk)
 
         # project error covariance ahead
         Pk_prior = Ak @ ((Pk @ Ak.T) + Qk)
@@ -179,12 +183,7 @@ class KalmanFilter:
         return xk_prior, Pk_prior
 
     def update(
-        self,
-        Hk: np.ndarray,
-        xk: np.ndarray,
-        Pk: np.ndarray,
-        zk: np.ndarray,
-        Rk: np.ndarray,
+        self, xk: np.ndarray, Pk: np.ndarray, zk: np.ndarray, Rk: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
         """Updates states and covariances.
 
@@ -193,8 +192,6 @@ class KalmanFilter:
 
         Parameters
         ----------
-        Hk : numpy.ndarray
-            Observation matrix at time :math:`k`.
         xk : numpy.ndarray
             Prior mean state estimate at time :math:`k`.
         Pk : numpy.ndarray
@@ -211,6 +208,9 @@ class KalmanFilter:
         Pk_posterior : numpy.ndarray
             A posteriori estimate error covariance at time :math:`k`.
         """
+        # jacobian of h with respect to x evaluated at xk
+        Hk = self.jacobian_H(xk)
+
         # innovation (pre-fit residual) covariance
         Sk = Hk @ (Pk @ Hk.T) + Rk
 
@@ -219,7 +219,7 @@ class KalmanFilter:
         self.kalman_gains.append(Kk)
 
         # update estimate via zk
-        xk_posterior = xk + Kk @ (zk - Hk @ xk)
+        xk_posterior = xk + Kk @ (zk - self.h(xk))
 
         # update error covariance
         Pk_posterior = (self.__I - Kk @ Hk) @ Pk
@@ -259,16 +259,14 @@ class KalmanFilter:
         Pk = self.Pk
 
         # feedback-control loop
-        _iterable = zip(self.A, self.H, self.B, U, Z, self.Q, self.R)
-        for k, (Ak, Hk, Bk, uk, zk, Qk, Rk) in enumerate(_iterable):
+        _iterable = zip(U, Z, self.Q, self.R)
+        for k, (uk, zk, Qk, Rk) in enumerate(_iterable):
             # predict step, get prior estimates
-            xk_prior, Pk_prior = self.predict(
-                Ak=Ak, xk=xk, Bk=Bk, uk=uk, Pk=Pk, Qk=Qk
-            )
+            xk_prior, Pk_prior = self.predict(xk=xk, uk=uk, Pk=Pk, Qk=Qk)
 
             # update step, correct prior estimates
             xk_posterior, Pk_posterior = self.update(
-                Hk=Hk, xk=xk_prior, Pk=Pk_prior, zk=zk, Rk=Rk
+                xk=xk_prior, Pk=Pk_prior, zk=zk, Rk=Rk
             )
 
             states.append(xk_posterior)
