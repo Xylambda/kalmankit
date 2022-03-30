@@ -52,9 +52,8 @@ The library provides 3 examples of usage:
 2. [Market Beta estimation](examples/market_beta.py)
 3. [Extended Kalman Filter](examples/extended.py)
 
-Take into account that the examples have specific requirements, like 
-`Matplotlib` or `autograd`. A `requirements-example.txt` is provided to install
-these dependencies.
+A `requirements-example.txt` is provided to install the needed dependencies to
+run the examples.
 
 ## References
 * Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)

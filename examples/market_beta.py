@@ -35,8 +35,8 @@ if __name__ == "__main__":
     xk = np.array([0, 0])
     Pk = np.ones((2, 2))
 
-    Q = np.array([0.01 * np.eye(2)] * len(Z)) # process noise / transition covariance
-    R = np.ones((len(Z))) * 0.01 # measurement noise / observation covariance
+    Q = np.array([0.01 * np.eye(2)] * len(Z))  # process noise / transition covariance
+    R = np.ones((len(Z))) * 0.01  # measurement noise / observation covariance
 
     # -------------------------------------------------------------------------
     # run Kalman filter
