@@ -8,11 +8,11 @@ system:
 xk = f(xk-1, uk-1) + qk
 zk = h(xk) + rk
 
-Then, we set the parameters, and the jacobian matrices.
+Then, we set the parameters and the jacobian matrices.
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from kalmanfilter import ExtendedKalmanFilter
+from kalmankit import ExtendedKalmanFilter
 
 
 def generate_observations(f, h, size=100):

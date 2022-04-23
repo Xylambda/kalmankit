@@ -27,9 +27,7 @@ class ExtendedKalmanFilter:
 
     .. math::
 
-        \hat{x}_{k}^{-} = f(\hat{x}_{k-1}^{-}, u_{k-1})
-
-    .. math::
+        \hat{x}_{k}^{-} = f(\hat{x}_{k-1}^{-}, u_{k-1}) \\
         P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
 
     with :math:`A_{k} = \frac{\partial f}{x}` evaluated at
@@ -39,13 +37,8 @@ class ExtendedKalmanFilter:
 
     .. math::
 
-        K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T} + R_{k})^{-1}
-
-    .. math::
-
-        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - h(\hat{x}_{k}^{-}))
-
-    .. math::
+        K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T} + R_{k})^{-1} \\
+        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - h(\hat{x}_{k}^{-})) \\
         P_k = (I - K_k H) P_{k}^{-}
 
     with :math:`H_{k} = \frac{\partial h}{x}` evaluated at
@@ -215,7 +208,7 @@ class ExtendedKalmanFilter:
         Sk = Hk @ (Pk @ Hk.T) + Rk
 
         # optimal kalman gain
-        Kk = Pk @ (Hk.T @ np.linalg.inv(Sk))
+        Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))
         self.kalman_gains.append(Kk)
 
         # update estimate via zk
@@ -277,3 +270,11 @@ class ExtendedKalmanFilter:
             Pk = Pk_posterior
 
         return states, errors
+
+
+    def smooth(
+        self, Z: np.ndarray, U: np.ndarray
+    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        """Extended Rauch-Tung-Strieble (RTS) smoother.
+        """
+        pass

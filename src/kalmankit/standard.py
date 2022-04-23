@@ -2,6 +2,14 @@
 import numpy as np
 from typing import Tuple, List
 
+__all__ = ["KalmanFilter"]
+
+
+def __autobroadcast(arr, shape):
+    """Broadcast arrays properly for the filter to work.
+    """
+    pass
+
 
 class KalmanFilter:
     r"""Standard Kalman filter algorithm.
@@ -11,10 +19,7 @@ class KalmanFilter:
 
     .. math::
 
-        x_{k} = A x_{k} + B u_{k} + q_{k}
-
-    .. math::
-
+        x_{k} = A x_{k} + B u_{k} + q_{k} \\
         z_{k} = H x_{k} + r_{k}
 
     with :math:`q_{k} \sim \mathcal{N}(0, Q)` and
@@ -26,22 +31,15 @@ class KalmanFilter:
 
     .. math::
 
-        \hat{x}_{k}^{-} = A_{k} \hat{x}_{k-1}^{-} + B_{k} u_{k-1}
-
-    .. math::
+        \hat{x}_{k}^{-} = A_{k} \hat{x}_{k-1}^{-} + B_{k} u_{k-1} \\
         P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
 
     2. Update step
 
     .. math::
 
-        K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T} + R_{k})^{-1}
-
-    .. math::
-
-        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - H_{k} \hat{x}_{k}^{-})
-
-    .. math::
+        K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T} + R_{k})^{-1} \\
+        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - H_{k} \hat{x}_{k}^{-}) \\
         P_k = (I - K_k H) P_{k}^{-}
 
     See 2nd and 3rd references to understand notation.
@@ -215,7 +213,7 @@ class KalmanFilter:
         Sk = Hk @ (Pk @ Hk.T) + Rk
 
         # optimal kalman gain
-        Kk = Pk @ (Hk.T @ np.linalg.inv(Sk))
+        Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))
         self.kalman_gains.append(Kk)
 
         # update estimate via zk
@@ -251,8 +249,8 @@ class KalmanFilter:
             A posteriori estimate error covariances for each time step
             :math:`k`.
         """
-        states = []  # mean
-        errors = []  # covariance
+        states = [None] * len(Z)  # mean
+        errors = [None] * len(Z)  # covariance
 
         # get initial conditions
         xk = self.xk
@@ -271,11 +269,57 @@ class KalmanFilter:
                 Hk=Hk, xk=xk_prior, Pk=Pk_prior, zk=zk, Rk=Rk
             )
 
-            states.append(xk_posterior)
-            errors.append(Pk_posterior)
+            states[k] = xk_posterior
+            errors[k] = Pk_posterior
 
             # update estimates for the next iteration
             xk = xk_posterior
             Pk = Pk_posterior
 
         return states, errors
+
+    def smooth(
+        self, Z: np.ndarray, U: np.ndarray
+    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        """Rauch-Tung-Strieble (RTS) smoother.
+
+        Parameters
+        ----------
+        Z : numpy.ndarray
+            Observed variable
+        U : numpy.ndarray
+            Control-input vector.
+
+        Returns
+        -------
+        xk_smooth : list of numpy.ndarray
+            Smoothed means for each time step :math:`k`.
+        Pk_smooth : list of numpy.ndarray
+            Smoothed error covariances for each time step :math:`k`.
+        """
+        # filtering process to get posteriors
+        x_est, P_est = self.filter(Z=Z, U=U)
+
+        xk_smooth = [None] * len(Z)
+        Pk_smooth = [None] * len(Z)
+
+        # smooth initialization
+        xk_smooth[-1] = x_est[-1]
+        Pk_smooth[-1] = P_est[-1]
+
+        n_obs = len(Z)
+        for k in range(n_obs - 2, -1, -1):
+            # select appropiate parameters for each time step
+            Ak = self.A[k]
+            Qk = self.Q[k]
+
+            # predicted mean and covariance
+            xk_ahead = Ak @ x_est[k]
+            Pk_ahead = Ak @ (P_est[k] @ Ak.T) + Qk
+
+            # smooth (like butter) process
+            Kk = P_est[k] @ (Ak.T @ np.linalg.pinv(Pk_ahead))
+            xk_smooth[k] = x_est[k] + Kk @ (xk_smooth[k + 1] - xk_ahead)
+            Pk_smooth[k] = P_est[k] + Kk @ ((Pk_smooth[k + 1] - Pk_ahead.T) @ Kk)
+
+        return xk_smooth, Pk_smooth

@@ -2,7 +2,7 @@
 Quick Start
 ===========
 
-Welcome to `kalmanfilter` docs. This library implements a multidimensional
+Welcome to `kalmankit` docs. This library implements a multidimensional
 Kalman Filter using NumPy.
 
 The current version of the library only supports the standard Kalman Filter. To
@@ -18,7 +18,7 @@ observations:
 
 >>> import numpy as np
 >>> import matplotlib.pyplot as plt
->>> from kalmanfilter import KalmanFilter
+>>> from kalmankit import KalmanFilter
 >>> 
 >>> 
 >>> def generate_func(start, end, step, beta, var):

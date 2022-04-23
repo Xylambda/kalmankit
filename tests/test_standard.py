@@ -1,5 +1,5 @@
 import numpy as np 
-from kalmanfilter import KalmanFilter
+from kalmankit import KalmanFilter
 
 
 data = np.array([0.39, 0.50, 0.48, 0.29, 0.25, 0.32, 0.34, 0.48, 0.41, 0.45])

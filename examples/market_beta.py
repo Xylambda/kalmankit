@@ -15,7 +15,7 @@ https://github.com/quantopian/research_public/blob/master/notebooks/lectures/Kal
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from kalmanfilter import KalmanFilter
+from kalmankit import KalmanFilter
 
 
 if __name__ == "__main__":
