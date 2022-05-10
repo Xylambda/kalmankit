@@ -277,8 +277,8 @@ class ExtendedKalmanFilter:
                 xk=xk_prior, Pk=Pk_prior, zk=zk, Rk=Rk
             )
 
-            states.append(xk_posterior)
-            errors.append(Pk_posterior)
+            states[k] = xk_posterior
+            errors[k] = Pk_posterior
 
             # update estimates for the next iteration
             xk = xk_posterior

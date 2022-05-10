@@ -47,4 +47,4 @@ def is_nan(arr: np.ndarray) -> bool:
         Whether all elements are nan (True) or not (False).
     """
     isnan = np.isnan(arr).flatten().sum()
-    return bool(isnan)
+    return isnan == arr.size

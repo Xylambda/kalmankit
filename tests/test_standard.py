@@ -70,45 +70,6 @@ def test_filter():
     )
 
 
-def test_filter_against_pykalman():
-    Z = data
-
-    # ----- kalman settings -----
-    A = np.expand_dims(np.ones((len(Z),1)), axis=1)  # transition matrix
-    xk = np.array([[1]])  # initial mean estimate
-
-    Pk = np.array([[1]])  # initial covariance estimate
-    Q = np.ones((len(Z))) * 0.005  # process noise covariance
-
-    H = A.copy()  # observation matrix
-    R = np.ones((len(Z))) * 0.01  # measurement noise covariance
-
-    pkf = PyKalmanFilter(
-        transition_matrices=A[0],
-        observation_matrices=H,
-        transition_covariance=np.array([[Q[0]]]),
-        observation_covariance=np.array([[R[0]]]),
-        initial_state_mean=xk,
-        initial_state_covariance=Pk,
-    )
-    kf = KalmanFilter(A=A, xk=xk, B=None, Pk=Pk, H=H, Q=Q, R=R)
-
-    expected_means, expected_cov = pkf.filter(Z)
-    obtained_means, obtained_cov = kf.filter(Z, U=None)
-
-    np.testing.assert_almost_equal(
-        expected_means.flatten(),
-        np.stack(obtained_means).flatten(),
-        decimal=5
-    )
-
-    np.testing.assert_almost_equal(
-        expected_cov.flatten(),
-        np.stack(obtained_cov).flatten(),
-        decimal=5
-    )
-
-
 def test_smooth():
     Z = data
 
