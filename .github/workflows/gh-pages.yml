@@ -6,45 +6,48 @@ on:
       - master
 
 jobs:
-  deploy:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
+  build_docs_job:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Python Set Up
+        uses: actions/setup-python@v2.2.1
         with:
-          python-version: '3.8'
+          python-version: 3.8
 
       - name: Upgrade pip
         run: |
           # install pip=>20.1 to use "pip cache dir"
           python3 -m pip install --upgrade pip
 
-      - name: Get pip cache dir
-        id: pip-cache
-        run: echo "::set-output name=dir::$(pip cache dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: Install dependencies
-        run: python3 -m pip install -r ./requirements-dev.txt
-
-      - name: Build docs
         run: |
-          cd docs
-          make html
-          touch build/html/.nojekyll
+          python3 -m pip install . -r requirements-dev.txt
 
-      - name: Deploy docs
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+      - name: Make Sphinx docs
+        run: |
+          make -C docs clean
+          make -C docs html
+
+      - name: Init new repository in dist folder and commit generated files
+        run: |
+          cd docs/build/html/
+          git init
+          touch .nojekyll
+          git add -A
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m 'deploy'
+
+      - name: Force push to destination branch
+        uses: ad-m/github-push-action@0.5.0
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: docs/build/html # The folder the action should deploy.
+          github_token: ${{ secrets.GITHUB_TOKEN }}$
+          branch: gh-pages
+          force: true
+          directory: ./docs/build/html

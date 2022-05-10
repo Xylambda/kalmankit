@@ -9,7 +9,7 @@ https://github.com/quantopian/research_public/blob/master/notebooks/lectures/Kal
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from kalmanfilter import KalmanFilter
+from kalmankit import KalmanFilter
 
 
 # -----------------------------------------------------------------------------
@@ -48,7 +48,7 @@ def generate_func(start, end, step, beta, var):
     return out
 
 
-if __name__ == "__main__":
+def main():
     # -------------------------------------------------------------------------
     # generate noisy observations
     Z = generate_func(start=-10, end=10, step=0.1, beta=0.02, var=0.3)
@@ -57,24 +57,20 @@ if __name__ == "__main__":
     A = np.expand_dims(np.ones((len(Z),1)), axis=1)  # transition matrix
     xk = np.array([[1]])  # initial mean estimate
 
-    B = np.expand_dims(np.zeros((len(Z),1)), axis=1)  # control-input matrix
-    U = np.zeros((len(Z), 1))  # control-input vector
-
     Pk = np.array([[1]])  # initial covariance estimate
     Q = np.ones((len(Z))) * 0.005  # process noise covariance
 
     H = A.copy()  # observation matrix
     R = np.ones((len(Z))) * 0.01  # measurement noise covariance
 
+    # B = np.expand_dims(np.zeros((len(Z),1)), axis=1)  # control-input matrix
+    # U = np.zeros((len(Z), 1))  # control-input vector
+
     # -------------------------------------------------------------------------
     # run Kalman filter
-    kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
-    states, errors = kf.filter(Z=Z, U=U)
+    kf = KalmanFilter(A=A, xk=xk, B=None, Pk=Pk, H=H, Q=Q, R=R)
+    states, errors = kf.filter(Z=Z, U=None)
     kalman_gain = np.stack([val.item() for val in kf.kalman_gains])
-
-    # as array
-    states = np.stack([val.item() for val in states])
-    errors = np.stack([val.item() for val in errors])
 
     # plot
     fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(15,4))
@@ -83,10 +79,14 @@ if __name__ == "__main__":
     ax[0].set_title('Estimated means over signal')
     ax[0].legend()
 
-    ax[1].plot(errors)
+    ax[1].plot(errors.flatten())
     ax[1].set_title('Covariances')
 
     ax[2].plot(kalman_gain)
     ax[2].set_title('Kalman Gain')
 
     plt.show()
+
+
+if __name__ == "__main__":
+    main()

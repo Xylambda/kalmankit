@@ -1,7 +1,7 @@
-kalmanfilter package
+kalmankit package
 ====================
 
-.. automodule:: kalmanfilter
+.. automodule:: kalmankit
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,5 +12,5 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   kalmanfilter.extended
-   kalmanfilter.standard
+   kalmankit.extended
+   kalmankit.standard

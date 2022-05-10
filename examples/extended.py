@@ -1,6 +1,6 @@
 """
-In this example we are going to see how to use the Extended Kalman Filter. We
-will use the `autograd` package to compute the Jacobians.
+In this example we are going to see how to use the Extended Kalman Filter. The
+problem configuration is random and does nothing particularly useful.
 
 To generate the observations we have to use the equations that define the 
 system:
@@ -8,11 +8,11 @@ system:
 xk = f(xk-1, uk-1) + qk
 zk = h(xk) + rk
 
-Then, we set the parameters, and the jacobian matrices.
+Then, we set the parameters and the jacobian matrices.
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from kalmanfilter import ExtendedKalmanFilter
+from kalmankit import ExtendedKalmanFilter
 
 
 def generate_observations(f, h, size=100):
@@ -31,7 +31,7 @@ def generate_observations(f, h, size=100):
     return Z
 
 
-if __name__ == "__main__":
+def main():
     # -------------------------------------------------------------------------
     # define functions and jacobian matrices
     def f(xk: np.ndarray, uk: np.ndarray) -> np.ndarray:
@@ -103,3 +103,7 @@ if __name__ == "__main__":
     ax[2].set_title('Kalman Gain')
 
     plt.show()
+
+
+if __name__ == "__main__":
+    main()

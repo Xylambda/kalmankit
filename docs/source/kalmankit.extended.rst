@@ -1,7 +1,7 @@
-kalmanfilter.standard module
+kalmankit.extended module
 ============================
 
-.. automodule:: kalmanfilter.standard
+.. automodule:: kalmankit.extended
    :members:
    :undoc-members:
    :show-inheritance:

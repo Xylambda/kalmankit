@@ -1,6 +1,9 @@
 """ Vanilla implementation of the standard Kalman filter algorithm"""
 import numpy as np
 from typing import Tuple, List
+from kalmankit.utils import check_none_and_broadcast, is_nan
+
+__all__ = ["KalmanFilter"]
 
 
 class KalmanFilter:
@@ -11,10 +14,7 @@ class KalmanFilter:
 
     .. math::
 
-        x_{k} = A x_{k} + B u_{k} + q_{k}
-
-    .. math::
-
+        x_{k} = A x_{k} + B u_{k} + q_{k} \\
         z_{k} = H x_{k} + r_{k}
 
     with :math:`q_{k} \sim \mathcal{N}(0, Q)` and
@@ -26,22 +26,15 @@ class KalmanFilter:
 
     .. math::
 
-        \hat{x}_{k}^{-} = A_{k} \hat{x}_{k-1}^{-} + B_{k} u_{k-1}
-
-    .. math::
+        \hat{x}_{k}^{-} = A_{k} \hat{x}_{k-1}^{-} + B_{k} u_{k-1} \\
         P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
 
     2. Update step
 
     .. math::
 
-        K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T} + R_{k})^{-1}
-
-    .. math::
-
-        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - H_{k} \hat{x}_{k}^{-})
-
-    .. math::
+        K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T} + R_{k})^{-1} \\
+        \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - H_{k} \hat{x}_{k}^{-}) \\
         P_k = (I - K_k H) P_{k}^{-}
 
     See 2nd and 3rd references to understand notation.
@@ -115,17 +108,21 @@ class KalmanFilter:
         H: np.ndarray,
         Q: np.ndarray,
         R: np.ndarray,
+        state_size: int = None,
     ):
         self.A = A
         self.xk = xk
-        self.B = B
+        self.B = check_none_and_broadcast(B, A)
         self.Pk = Pk
         self.H = H
         self.Q = Q
         self.R = R
 
         # attributes
-        self.state_size = self.xk.shape[0]  # usually called 'n'
+        if state_size:
+            self.state_size = state_size
+        else:
+            self.state_size = self.xk.shape[0]
         self.__I = np.identity(self.state_size)
         self.kalman_gains: List[np.ndarray] = []
 
@@ -142,6 +139,11 @@ class KalmanFilter:
 
         Predict step of the Kalman filter. Computes the prior values of state
         and covariance using the previous timestep (if any).
+
+        .. math::
+
+            \hat{x}_{k}^{-} = A_{k} \hat{x}_{k-1}^{-} + B_{k} u_{k-1} \\
+            P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
 
         Parameters
         ----------
@@ -168,7 +170,7 @@ class KalmanFilter:
             Prior value of state covariance.
         """
         # project state ahead
-        if Bk is None or uk is None:
+        if is_nan(Bk) or is_nan(uk):
             xk_prior = Ak @ xk
         else:
             xk_prior = Ak @ xk + Bk @ uk
@@ -190,6 +192,12 @@ class KalmanFilter:
 
         Update step of the Kalman filter. That is, the filter combines the
         predictions with the observed variable :math:`Z` at time :math:`k`.
+
+        .. math::
+
+            K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T}+R_{k})^{-1} \\
+            \hat{x}_{k} = \hat{x}_{k}^{-}+K_k (z_k - H_{k} \hat{x}_{k}^{-}) \\
+            P_k = (I - K_k H) P_{k}^{-}
 
         Parameters
         ----------
@@ -215,7 +223,7 @@ class KalmanFilter:
         Sk = Hk @ (Pk @ Hk.T) + Rk
 
         # optimal kalman gain
-        Kk = Pk @ (Hk.T @ np.linalg.inv(Sk))
+        Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))
         self.kalman_gains.append(Kk)
 
         # update estimate via zk
@@ -227,7 +235,7 @@ class KalmanFilter:
         return xk_posterior, Pk_posterior
 
     def filter(
-        self, Z: np.ndarray, U: np.ndarray
+        self, Z: np.ndarray, U: np.ndarray = None
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """Run filter over Z and U.
 
@@ -240,7 +248,7 @@ class KalmanFilter:
         ----------
         Z : numpy.ndarray
             Observed variable
-        U : numpy.ndarray
+        U : numpy.ndarray, optional, default: None
             Control-input vector.
 
         Returns
@@ -251,12 +259,16 @@ class KalmanFilter:
             A posteriori estimate error covariances for each time step
             :math:`k`.
         """
-        states = []  # mean
-        errors = []  # covariance
+        # mean and covariance array allocation
+        states = np.zeros((len(Z), self.state_size))
+        errors = np.zeros((len(Z), self.state_size, self.state_size))
 
         # get initial conditions
         xk = self.xk
         Pk = self.Pk
+
+        # allow U to be None without the filter failing
+        U = check_none_and_broadcast(U, Z)
 
         # feedback-control loop
         _iterable = zip(self.A, self.H, self.B, U, Z, self.Q, self.R)
@@ -271,11 +283,72 @@ class KalmanFilter:
                 Hk=Hk, xk=xk_prior, Pk=Pk_prior, zk=zk, Rk=Rk
             )
 
-            states.append(xk_posterior)
-            errors.append(Pk_posterior)
+            states[k] = xk_posterior
+            errors[k] = Pk_posterior
 
             # update estimates for the next iteration
             xk = xk_posterior
             Pk = Pk_posterior
 
         return states, errors
+
+    def smooth(
+        self, Z: np.ndarray, U: np.ndarray = None
+    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        """Rauch-Tung-Strieble (RTS) smoother.
+
+        The smoothing process refines the estimates in the light of new data.
+        Formally, the smoothing process can be described as
+
+        .. math::
+
+            x_{k+1}^{-} = A_{k} x_{k} \\
+            P_{k+1}^{-} = A_{k} P_{k} A_{k}^{T} + Q_{k} \\
+            G_{k} = P_{k} A_{k}^{T} \left( P_{k+1}^{-} \right)^{-1} \\
+            x_{k}^{s} = x_{k}+G_{k} \left( m_{k+1}^{s} - m_{k+1}^{-} \right) \\
+            P_{k}^{s} = P_{k} + G_{k} \left( P_{k+1}^{s} - P_{k+1}^{-}
+            \right) G_{k}^{T}
+        
+        Parameters
+        ----------
+        Z : numpy.ndarray
+            Observed variable
+        U : numpy.ndarray, optional, default: None
+            Control-input vector.
+
+        Returns
+        -------
+        xk_smooth : list of numpy.ndarray
+            Smoothed means for each time step :math:`k`.
+        Pk_smooth : list of numpy.ndarray
+            Smoothed error covariances for each time step :math:`k`.
+        """
+        # filtering process to get posteriors
+        x_est, P_est = self.filter(Z=Z, U=U)
+
+        # mean and covariance array allocation
+        xk_smooth = np.zeros((len(Z), self.state_size))
+        Pk_smooth = np.zeros((len(Z), self.state_size, self.state_size))
+
+        # smooth initialization
+        xk_smooth[-1] = x_est[-1]
+        Pk_smooth[-1] = P_est[-1]
+
+        n_obs = len(Z)
+        for k in range(n_obs - 2, -1, -1):
+            # select appropiate parameters for each time step
+            Ak = self.A[k]
+            Qk = self.Q[k]
+
+            # predicted mean and covariance
+            xk_ahead = Ak @ x_est[k]
+            Pk_ahead = Ak @ (P_est[k] @ Ak.T) + Qk
+
+            # smooth (like butter) process
+            Kk = P_est[k] @ (Ak.T @ np.linalg.pinv(Pk_ahead))
+            xk_smooth[k] = x_est[k] + Kk @ (xk_smooth[k + 1] - xk_ahead)
+            Pk_smooth[k] = P_est[k] + Kk @ (
+                (Pk_smooth[k + 1] - Pk_ahead.T) @ Kk
+            )
+
+        return xk_smooth, Pk_smooth

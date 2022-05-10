@@ -2,11 +2,11 @@
   <img src="img/logo.png" width="700">
 </p>
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Xylambda/kalmanfilter?label=VERSION&style=badge)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Xylambda/kalmanfilter?style=badge)
-![GitHub issues](https://img.shields.io/github/issues/Xylambda/kalmanfilter?style=badge)
-![workflow](https://github.com/Xylambda/kalmanfilter/actions/workflows/cicd.yaml/badge.svg)
-[![doc](https://img.shields.io/badge/DOCS-documentation-blue.svg?style=badge)](https://xylambda.github.io/kalmanfilter/)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Xylambda/kalmankit?label=VERSION&style=badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Xylambda/kalmankit?style=badge)
+![GitHub issues](https://img.shields.io/github/issues/Xylambda/kalmankit?style=badge)
+![workflow](https://github.com/Xylambda/kalmankit/actions/workflows/cicd.yaml/badge.svg)
+[![doc](https://img.shields.io/badge/DOCS-documentation-blue.svg?style=badge)](https://xylambda.github.io/kalmankit/)
 
 The Kalman filter is an optimal estimation algorithm: it estimates the true 
 state of a signal given that this signal is noisy and/or incomplete. This 
@@ -16,33 +16,33 @@ distribution and the underlying system is governed by linear equations, the
 filter will output the best possible estimate of the signal's true state.
 
 * **Extended Kalman Filter**: can deal with nonlinear systems, but it does not
-output the optimal estimate. It works by linearizing the function locally using
-the Jacobian matrix.
+guarantee the optimal estimate. It works by linearizing the function locally
+using the Jacobian matrix.
 
 
 ## Installation
 Normal user:
 ```bash
-git clone https://github.com/Xylambda/kalmanfilter.git
-pip install kalmanfilter/.
+git clone https://github.com/Xylambda/kalmankit.git
+pip install kalmankit/.
 ```
 
 alternatively:
 ```bash
-git clone https://github.com/Xylambda/kalmanfilter.git
-pip install kalmanfilter/. -r kalmanfilter/requirements.txt
+git clone https://github.com/Xylambda/kalmankit.git
+pip install kalmankit/. -r kalmankit/requirements.txt
 ```
 
 Developer:
 ```bash
-git clone https://github.com/Xylambda/kalmanfilter.git
-pip install -e kalmanfilter/. -r kalmanfilter/requirements-dev.txt
+git clone https://github.com/Xylambda/kalmankit.git
+pip install -e kalmankit/. -r kalmankit/requirements-dev.txt
 ```
 
 ## Tests
 To run tests you must install the library as a `developer`.
 ```bash
-cd kalmanfilter/
+cd kalmankit/
 pytest -v tests/
 ```
 
@@ -63,3 +63,16 @@ run the examples.
 * Greg Welch, Gary Bishop - [An Introduction to the Kalman Filter](https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf)
 
 * Simo Särkkä - Bayesian filtering and Smoothing. Cambridge University Press.
+
+
+## Cite
+If you've used this library for your projects please cite it:
+
+```latex
+@misc{alejandro2021kalmankit,
+  title={kalmankit - Multidimensional implementation of Kalman Filter algorithm},
+  author={Alejandro Pérez-Sanjuán},
+  year={2021},
+  howpublished={\url{https://github.com/Xylambda/kalmankit}},
+}
+```

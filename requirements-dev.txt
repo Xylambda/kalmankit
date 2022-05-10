@@ -1,4 +1,5 @@
 -r requirements.txt
 -r requirements-doc.txt
 
+pykalman==0.9.5  # for testing purposes
 pytest==5.0.1
