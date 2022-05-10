@@ -1,6 +1,9 @@
 """ Implementation of the extended Kalman filter algorithm"""
 import numpy as np
 from typing import Tuple, List, Callable
+from kalmankit.utils import check_none_and_broadcast
+
+__all__ = ["ExtendedKalmanFilter"]
 
 
 class ExtendedKalmanFilter:
@@ -11,10 +14,7 @@ class ExtendedKalmanFilter:
 
     .. math::
 
-        x_{k} = f(x_{k-1}, u_{k-1}) + q_{k}
-
-    .. math::
-
+        x_{k} = f(x_{k-1}, u_{k-1}) + q_{k} \\
         z_{k} = h(x_{k}) + r_{k}
 
     with :math:`q_{k} \sim \mathcal{N}(0, Q)`,
@@ -146,6 +146,11 @@ class ExtendedKalmanFilter:
         Predict step of the Kalman filter. Computes the prior values of state
         and covariance using the previous timestep (if any).
 
+        .. math::
+
+            \hat{x}_{k}^{-} = f(\hat{x}_{k-1}^{-}, u_{k-1}) \\
+            P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
+
         Parameters
         ----------
         xk : numpy.ndarray
@@ -182,6 +187,12 @@ class ExtendedKalmanFilter:
 
         Update step of the Kalman filter. That is, the filter combines the
         predictions with the observed variable :math:`Z` at time :math:`k`.
+
+        .. math::
+
+            K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T}+R_{k})^{-1} \\
+            \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - h(\hat{x}_{k}^{-})) \\
+            P_k = (I - K_k H) P_{k}^{-}
 
         Parameters
         ----------
@@ -220,7 +231,7 @@ class ExtendedKalmanFilter:
         return xk_posterior, Pk_posterior
 
     def filter(
-        self, Z: np.ndarray, U: np.ndarray
+        self, Z: np.ndarray, U: np.ndarray = None
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """Run filter over Z and U.
 
@@ -233,7 +244,7 @@ class ExtendedKalmanFilter:
         ----------
         Z : numpy.ndarray
             Observed variable
-        U : numpy.ndarray
+        U : numpy.ndarray, optional, default: None
             Control-input vector.
 
         Returns
@@ -244,12 +255,16 @@ class ExtendedKalmanFilter:
             A posteriori estimate error covariances for each time step
             :math:`k`.
         """
-        states = []  # mean
-        errors = []  # covariance
+        # mean and covariance array allocation
+        states = np.zeros((len(Z), self.state_size))
+        errors = np.zeros((len(Z), self.state_size, self.state_size))
 
         # get initial conditions
         xk = self.xk
         Pk = self.Pk
+
+        # allow U to be None without the filter failing
+        U = check_none_and_broadcast(U, Z)
 
         # feedback-control loop
         _iterable = zip(U, Z, self.Q, self.R)
@@ -273,7 +288,7 @@ class ExtendedKalmanFilter:
 
 
     def smooth(
-        self, Z: np.ndarray, U: np.ndarray
+        self, Z: np.ndarray, U: np.ndarray = None
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """Extended Rauch-Tung-Strieble (RTS) smoother.
         """

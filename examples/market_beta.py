@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from kalmankit import KalmanFilter
 
 
-if __name__ == "__main__":
+def main():
     # -------------------------------------------------------------------------
     # generate stock returns using a t distribution
     stock_x = 0.01 * np.random.standard_t(df=30, size=2000)
@@ -26,10 +26,8 @@ if __name__ == "__main__":
 
     # kalman settings
     Z = stock_y.copy()
-    U = np.zeros((len(Z), 2, 1)) # control-input vector
 
     A = np.array([np.eye(2)] * len(Z))
-    B = np.zeros((len(Z), 2, 2))
     H = np.expand_dims(np.vstack([[stock_x], [np.ones(len(stock_x))]]).T, axis=1)
 
     xk = np.array([0, 0])
@@ -38,15 +36,14 @@ if __name__ == "__main__":
     Q = np.array([0.01 * np.eye(2)] * len(Z))  # process noise / transition covariance
     R = np.ones((len(Z))) * 0.01  # measurement noise / observation covariance
 
+    # B = np.zeros((n_steps, 2, 1)) # model
+    # U = np.zeros((n_steps, 1)) # vector
+
     # -------------------------------------------------------------------------
     # run Kalman filter
-    kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
-    states, errors = kf.filter(Z=Z, U=U)
+    kf = KalmanFilter(A=A, xk=xk, B=None, Pk=Pk, H=H, Q=Q, R=R)
+    states, errors = kf.filter(Z=Z, U=None)
     kalman_gain = np.stack([gain.T[0] for gain in kf.kalman_gains])
-
-    # as array
-    states = np.stack([val[:, 0] for val in states])
-    errors = np.stack([val[:, 0] for val in errors])
 
     # -------------------------------------------------------------------------
     fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(15, 4))
@@ -65,3 +62,6 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
+
+if __name__ == "__main__":
+    main()

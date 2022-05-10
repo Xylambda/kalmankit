@@ -34,7 +34,7 @@ jobs:
           make -C docs clean
           make -C docs html
 
-      - name: Init new ropository in dist folder and commit generated files
+      - name: Init new repository in dist folder and commit generated files
         run: |
           cd docs/build/html/
           git init
