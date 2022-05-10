@@ -297,6 +297,18 @@ class KalmanFilter:
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """Rauch-Tung-Strieble (RTS) smoother.
 
+        The smoothing process refines the estimates in the light of new data.
+        Formally, the smoothing process can be described as
+
+        .. math::
+
+            x_{k+1}^{-} = A_{k} x_{k} \\
+            P_{k+1}^{-} = A_{k} P_{k} A_{k}^{T} + Q_{k} \\
+            G_{k} = P_{k} A_{k}^{T} \left( P_{k+1}^{-} \right)^{-1} \\
+            x_{k}^{s} = x_{k}+G_{k} \left( m_{k+1}^{s} - m_{k+1}^{-} \right) \\
+            P_{k}^{s} = P_{k} + G_{k} \left( P_{k+1}^{s} - P_{k+1}^{-}
+            \right) G_{k}^{T}
+        
         Parameters
         ----------
         Z : numpy.ndarray

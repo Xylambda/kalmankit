@@ -44,10 +44,10 @@ class ExtendedKalmanFilter:
     with :math:`H_{k} = \frac{\partial h}{x}` evaluated at
     :math:`\hat{x}_{k}^{-}`.
 
-    The Extended Kalman Filter can deal with non-linear systems but it is not
-    optimal, unless the system is linear and the noises are drawn from a normal
-    distribution, which will cause the Extended Kalman Filter to behave as a
-    standard Kalman Filter.
+    The Extended Kalman Filter can deal with non-linear systems but it does not
+    guarantee an optimal estimation unless the system is linear and the noises
+    are drawn from a normal distribution, which will cause the Extended Kalman
+    Filter to behave as a standard Kalman Filter.
 
     Parameters
     ----------
@@ -286,10 +286,9 @@ class ExtendedKalmanFilter:
 
         return states, errors
 
-
     def smooth(
         self, Z: np.ndarray, U: np.ndarray = None
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """Extended Rauch-Tung-Strieble (RTS) smoother.
         """
-        pass
+        raise NotImplementedError
