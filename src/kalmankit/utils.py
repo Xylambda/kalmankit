@@ -13,7 +13,7 @@ def check_none_and_broadcast(
 
     Check wether "arr" is None and generate a new array with shape equal to
     "broad_to" shape of np.nan values.
-    
+
     Parameters
     ----------
     arr : numpy.ndarray

@@ -289,6 +289,5 @@ class ExtendedKalmanFilter:
     def smooth(
         self, Z: np.ndarray, U: np.ndarray = None
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
-        """Extended Rauch-Tung-Strieble (RTS) smoother.
-        """
+        """Extended Rauch-Tung-Strieble (RTS) smoother."""
         raise NotImplementedError

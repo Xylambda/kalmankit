@@ -108,7 +108,7 @@ class KalmanFilter:
         H: np.ndarray,
         Q: np.ndarray,
         R: np.ndarray,
-        state_size: int = None
+        state_size: int = None,
     ):
         self.A = A
         self.xk = xk
@@ -347,6 +347,8 @@ class KalmanFilter:
             # smooth (like butter) process
             Kk = P_est[k] @ (Ak.T @ np.linalg.pinv(Pk_ahead))
             xk_smooth[k] = x_est[k] + Kk @ (xk_smooth[k + 1] - xk_ahead)
-            Pk_smooth[k] = P_est[k] + Kk @ ((Pk_smooth[k + 1] - Pk_ahead.T) @ Kk)
+            Pk_smooth[k] = P_est[k] + Kk @ (
+                (Pk_smooth[k + 1] - Pk_ahead.T) @ Kk
+            )
 
         return xk_smooth, Pk_smooth

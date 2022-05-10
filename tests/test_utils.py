@@ -20,3 +20,13 @@ def test_is_nan():
 
     msg = f"Incorrect evaluation of nan in array: {array_4}"
     assert not is_nan(array_4), msg
+
+
+def test_check_none_and_broadcast():
+    to_broad = np.zeros((2,2))
+
+    obtained = check_none_and_broadcast(None, to_broad)
+    _expected = to_broad.copy()
+    expected = _expected[:] = np.nan
+
+    np.testing.assert_almost_equal(obtained, expected)
