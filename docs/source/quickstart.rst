@@ -5,16 +5,14 @@ Quick Start
 Welcome to `kalmankit` docs. This library implements a multidimensional
 Kalman Filter using NumPy.
 
-The current version of the library only supports the standard Kalman Filter. To
-use it, one has to import the library and configure correctly the filter 
-parameters. Make sure the parameters configuration is correct or the filter 
-will not work.
+The current version of the library supports the standard and extended Kalman
+Filter. To use them, one has to import the library and configure correctly the
+filter  parameters. Make sure the parameters configuration is correct or the
+filter will not work.
 
 Here, we are going to define a Kalman Filter to act as a weighted moving 
-average.
-
-For this example we will create a noisy sine wave function to generate noisy 
-observations:
+average. For this example we will create a noisy sine wave function to generate
+noisy observations:
 
 >>> import numpy as np
 >>> import matplotlib.pyplot as plt
@@ -66,10 +64,10 @@ Notice how we expanded the dimensions of the matrix to get a 1x1 matrix in each
 time step
 
 The :math:`B` matrix represents the control-input model. We will not use any
-of the control settings of the filter, so we are going to set them as zero.
+of the control settings of the filter, so we are going to set them as `None`.
 
->>> B = np.expand_dims(np.zeros((len(Z),1)), axis=1) # control-input matrix
->>> U = np.zeros((len(Z), 1)) # control-input vector
+>>> B = None
+>>> U = None
 
 The last model we have to define is the observation model, which maps the true 
 state space into the observed space. Because we want a 1 to 1 relationship, the
@@ -103,15 +101,11 @@ the parameters
 
 >>> kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
 
-Then, we can call `filter` to filter the signal and the object will take 
-care of the feedback-control loop.
+Then, we can call `filter` to filter the signal and the object will take care
+of the feedback-control loop.
 
 >>> states, errors = kf.filter(Z=Z, U=U)
 
-You can use Matplotlib to visualize the results, though you may need to adapt 
-the shapes.
+The library also provides with a smoothing algorithm:
 
->>> plt.figure(figsize=(15,7))
->>> plt.plot(Z)
->>> plt.plot(states)
->>> plt.show()
+>>> states, errors = kf.smooth(Z=Z, U=U)

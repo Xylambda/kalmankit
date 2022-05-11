@@ -9,5 +9,5 @@ API reference
 .. autosummary::
    :toctree: _autosummary
 
-   kalmanfilter.standard
-   kalmanfilter.extended
+   kalmankit.standard
+   kalmankit.extended
