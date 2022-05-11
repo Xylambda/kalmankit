@@ -1,8 +1,8 @@
 """ Multidimensional implementation of the Kalman Filter algorithm. """
 
-from .standard import KalmanFilter
-from .extended import ExtendedKalmanFilter
 from ._version import get_versions
+from .extended import ExtendedKalmanFilter
+from .standard import KalmanFilter
 
 __all__ = ["KalmanFilter", "ExtendedKalmanFilter"]
 

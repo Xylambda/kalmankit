@@ -1,6 +1,8 @@
 """ Vanilla implementation of the standard Kalman filter algorithm"""
+from typing import List, Tuple
+
 import numpy as np
-from typing import Tuple, List
+
 from kalmankit.utils import check_none_and_broadcast, is_nan
 
 __all__ = ["KalmanFilter"]
@@ -135,7 +137,7 @@ class KalmanFilter:
         Pk: np.ndarray,
         Qk: np.ndarray,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Predicts states and covariances.
+        r"""Predicts states and covariances.
 
         Predict step of the Kalman filter. Computes the prior values of state
         and covariance using the previous timestep (if any).
@@ -144,6 +146,9 @@ class KalmanFilter:
 
             \hat{x}_{k}^{-} = A_{k} \hat{x}_{k-1}^{-} + B_{k} u_{k-1} \\
             P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
+
+        Here, the output are the `a priori` or predicted estimates of the mean
+        :math:`\hat{x}_{k}^{-}` and covariance :math:`P_{k}^{-}`.
 
         Parameters
         ----------
@@ -188,7 +193,7 @@ class KalmanFilter:
         zk: np.ndarray,
         Rk: np.ndarray,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Updates states and covariances.
+        r"""Updates states and covariances.
 
         Update step of the Kalman filter. That is, the filter combines the
         predictions with the observed variable :math:`Z` at time :math:`k`.
@@ -198,6 +203,9 @@ class KalmanFilter:
             K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T}+R_{k})^{-1} \\
             \hat{x}_{k} = \hat{x}_{k}^{-}+K_k (z_k - H_{k} \hat{x}_{k}^{-}) \\
             P_k = (I - K_k H) P_{k}^{-}
+
+        Here, the output are the `a posteriori` or corrected estimates of the
+        mean :math:`\hat{x}_{k}` and covariance :math:`P_k`.
 
         Parameters
         ----------
@@ -295,10 +303,11 @@ class KalmanFilter:
     def smooth(
         self, Z: np.ndarray, U: np.ndarray = None
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
-        """Rauch-Tung-Strieble (RTS) smoother.
+        r"""Rauch-Tung-Strieble (RTS) smoother.
 
         The smoothing process refines the estimates in the light of new data.
-        Formally, the smoothing process can be described as
+        Formally, for each time step :math:`k`, the smoothing process can be
+        described as
 
         .. math::
 

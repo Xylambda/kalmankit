@@ -7,3 +7,4 @@ sphinxcontrib-qthelp==1.0.2
 sphinxcontrib-serializinghtml==1.1.3
 sphinxcontrib-websupport==1.1.2
 furo==2020.12.30b24
+Jinja2==3.0.3  # see https://github.com/sphinx-doc/sphinx/issues/10291
