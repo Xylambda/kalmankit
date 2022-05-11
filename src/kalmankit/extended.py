@@ -1,6 +1,8 @@
 """ Implementation of the extended Kalman filter algorithm"""
+from typing import Callable, List, Tuple
+
 import numpy as np
-from typing import Tuple, List, Callable
+
 from kalmankit.utils import check_none_and_broadcast
 
 __all__ = ["ExtendedKalmanFilter"]
@@ -141,7 +143,7 @@ class ExtendedKalmanFilter:
     def predict(
         self, xk: np.ndarray, uk: np.ndarray, Pk: np.ndarray, Qk: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Predicts states and covariances.
+        r"""Predicts states and covariances.
 
         Predict step of the Kalman filter. Computes the prior values of state
         and covariance using the previous timestep (if any).
@@ -150,6 +152,9 @@ class ExtendedKalmanFilter:
 
             \hat{x}_{k}^{-} = f(\hat{x}_{k-1}^{-}, u_{k-1}) \\
             P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}
+
+        Here, the output are the `a priori` or predicted estimates of the mean
+        :math:`\hat{x}_{k}^{-}` and covariance :math:`P_{k}^{-}`.
 
         Parameters
         ----------
@@ -183,7 +188,7 @@ class ExtendedKalmanFilter:
     def update(
         self, xk: np.ndarray, Pk: np.ndarray, zk: np.ndarray, Rk: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Updates states and covariances.
+        r"""Updates states and covariances.
 
         Update step of the Kalman filter. That is, the filter combines the
         predictions with the observed variable :math:`Z` at time :math:`k`.
@@ -193,6 +198,9 @@ class ExtendedKalmanFilter:
             K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T}+R_{k})^{-1} \\
             \hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - h(\hat{x}_{k}^{-})) \\
             P_k = (I - K_k H) P_{k}^{-}
+
+        Here, the output are the `a posteriori` or corrected estimates of the
+        mean :math:`\hat{x}_{k}` and covariance :math:`P_k`.
 
         Parameters
         ----------
