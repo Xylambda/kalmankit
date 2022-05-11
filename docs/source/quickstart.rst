@@ -106,9 +106,6 @@ of the feedback-control loop.
 
 >>> states, errors = kf.filter(Z=Z, U=U)
 
-You can use Matplotlib to visualize the results.
+The library also provides with a smoothing algorithm:
 
->>> plt.figure(figsize=(15,7))
->>> plt.plot(Z)
->>> plt.plot(states)
->>> plt.show()
+>>> states, errors = kf.smooth(Z=Z, U=U)
