@@ -3,7 +3,7 @@ Convenience and utility functions for the library
 """
 import numpy as np
 
-__all__ = ["check_none_and_broadcast"]
+__all__ = ["check_none_and_broadcast", "is_nan"]
 
 
 def check_none_and_broadcast(
