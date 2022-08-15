@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='kalmankit',
     version=versioneer.get_version(),
-    description='Multidimensional implementation of Kalman Filter algorithm',
+    description='Multidimensional implementation of Kalman Filter algorithms',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/Xylambda/kalmankit',

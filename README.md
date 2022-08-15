@@ -21,19 +21,12 @@ using the Jacobian matrix.
 
 
 ## Installation
-Normal user:
+**Normal user**
 ```bash
-git clone https://github.com/Xylambda/kalmankit.git
-pip install kalmankit/.
+pip install kalmankit
 ```
 
-alternatively:
-```bash
-git clone https://github.com/Xylambda/kalmankit.git
-pip install kalmankit/. -r kalmankit/requirements.txt
-```
-
-Developer:
+**Developer**
 ```bash
 git clone https://github.com/Xylambda/kalmankit.git
 pip install -e kalmankit/. -r kalmankit/requirements-dev.txt
