@@ -219,6 +219,12 @@ class ExtendedKalmanFilter:
             A posteriori estimate error mean at time :math:`k`.
         Pk_posterior : numpy.ndarray
             A posteriori estimate error covariance at time :math:`k`.
+
+        Notes
+        -----
+        The original formula to compute the Kalman gain would be implemented as
+        `Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))`. Instead, a linear matrix is
+        solved due to being a more efficient and precise way.
         """
         # jacobian of h with respect to x evaluated at xk
         Hk = self.jacobian_H(xk)
@@ -227,7 +233,7 @@ class ExtendedKalmanFilter:
         Sk = Hk @ (Pk @ Hk.T) + Rk
 
         # optimal kalman gain
-        Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))
+        Kk = np.linalg.solve(Sk.T, Hk @ Pk.T).T
         self.kalman_gains.append(Kk)
 
         # update estimate via zk
@@ -298,4 +304,6 @@ class ExtendedKalmanFilter:
         self, Z: np.ndarray, U: np.ndarray = None
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         """Extended Rauch-Tung-Strieble (RTS) smoother."""
+        # TODO: https://github.com/EEA-sensors/Bayesian-Filtering-and
+        # Smoothing/blob/main/python/example_notebooks/pendulum_ekf.ipynb
         raise NotImplementedError

@@ -3,7 +3,7 @@ Convenience and utility functions for the library
 """
 import numpy as np
 
-__all__ = ["check_none_and_broadcast", "is_nan"]
+__all__ = ["check_none_and_broadcast", "is_nan_all"]
 
 
 def check_none_and_broadcast(
@@ -33,7 +33,7 @@ def check_none_and_broadcast(
     return arr
 
 
-def is_nan(arr: np.ndarray) -> bool:
+def is_nan_all(arr: np.ndarray) -> bool:
     """Check if all elements of the given array are nan.
 
     Parameters
@@ -46,5 +46,4 @@ def is_nan(arr: np.ndarray) -> bool:
     bool
         Whether all elements are nan (True) or not (False).
     """
-    isnan = np.isnan(arr).flatten().sum()
-    return isnan == arr.size
+    return np.isnan(arr).all()
