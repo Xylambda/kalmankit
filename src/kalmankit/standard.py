@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from kalmankit.utils import check_none_and_broadcast, is_nan
+from kalmankit.utils import check_none_and_broadcast, is_nan_all
 
 __all__ = ["KalmanFilter"]
 
@@ -175,7 +175,7 @@ class KalmanFilter:
             Prior value of state covariance.
         """
         # project state ahead
-        if is_nan(Bk) or is_nan(uk):
+        if is_nan_all(Bk) or is_nan_all(uk):
             xk_prior = Ak @ xk
         else:
             xk_prior = Ak @ xk + Bk @ uk
@@ -226,12 +226,18 @@ class KalmanFilter:
             A posteriori estimate error mean at time :math:`k`.
         Pk_posterior : numpy.ndarray
             A posteriori estimate error covariance at time :math:`k`.
+
+        Notes
+        -----
+        The original formula to compute the Kalman gain would be implemented as
+        `Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))`. Instead, a linear matrix is
+        solved due to being a more efficient and precise way.
         """
         # innovation (pre-fit residual) covariance
         Sk = Hk @ (Pk @ Hk.T) + Rk
 
         # optimal kalman gain
-        Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))
+        Kk = np.linalg.solve(Sk.T, Hk @ Pk.T).T
         self.kalman_gains.append(Kk)
 
         # update estimate via zk
@@ -317,7 +323,7 @@ class KalmanFilter:
             x_{k}^{s} = x_{k}+G_{k} \left( m_{k+1}^{s} - m_{k+1}^{-} \right) \\
             P_{k}^{s} = P_{k} + G_{k} \left( P_{k+1}^{s} - P_{k+1}^{-}
             \right) G_{k}^{T}
-        
+
         Parameters
         ----------
         Z : numpy.ndarray
@@ -343,15 +349,25 @@ class KalmanFilter:
         xk_smooth[-1] = x_est[-1]
         Pk_smooth[-1] = P_est[-1]
 
+        # to avoid the filter failing
+        U = check_none_and_broadcast(U, Z)
+        B = np.zeros_like(U)
+        B[:] = np.nan
+
         n_obs = len(Z)
         for k in range(n_obs - 2, -1, -1):
             # select appropiate parameters for each time step
             Ak = self.A[k]
             Qk = self.Q[k]
+            Bk = B[k]
+            uk = U[k]
+            Pk = P_est[k]
+            xk = x_est[k]
 
             # predicted mean and covariance
-            xk_ahead = Ak @ x_est[k]
-            Pk_ahead = Ak @ (P_est[k] @ Ak.T) + Qk
+            xk_ahead, Pk_ahead = self.predict(
+                Ak=Ak, xk=xk, Bk=Bk, uk=uk, Pk=Pk, Qk=Qk
+            )
 
             # smooth (like butter) process
             Kk = P_est[k] @ (Ak.T @ np.linalg.pinv(Pk_ahead))
