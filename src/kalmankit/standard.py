@@ -1,8 +1,15 @@
 """ Vanilla implementation of the standard Kalman filter algorithm"""
-from typing import List, Tuple
+from typing import List
 
 import numpy as np
+from beartype import beartype
 
+from kalmankit.typing import (
+    ArrayOrFloat,
+    OptionalArray,
+    OptionalArrayOrFloat,
+    ReturnArrayTuple,
+)
 from kalmankit.utils import check_none_and_broadcast, is_nan_all
 
 __all__ = ["KalmanFilter"]
@@ -101,11 +108,12 @@ class KalmanFilter:
     filter will not work properly.
     """
 
+    @beartype
     def __init__(
         self,
         A: np.ndarray,
         xk: np.ndarray,
-        B: np.ndarray,
+        B: OptionalArrayOrFloat,
         Pk: np.ndarray,
         H: np.ndarray,
         Q: np.ndarray,
@@ -128,15 +136,16 @@ class KalmanFilter:
         self.__I = np.identity(self.state_size)
         self.kalman_gains: List[np.ndarray] = []
 
+    @beartype
     def predict(
         self,
-        Ak: np.ndarray,
-        xk: np.ndarray,
-        Bk: np.ndarray,
-        uk: np.ndarray,
-        Pk: np.ndarray,
-        Qk: np.ndarray,
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        Ak: ArrayOrFloat,
+        xk: ArrayOrFloat,
+        Bk: OptionalArrayOrFloat,
+        uk: OptionalArrayOrFloat,
+        Pk: ArrayOrFloat,
+        Qk: ArrayOrFloat,
+    ) -> ReturnArrayTuple:
         r"""Predicts states and covariances.
 
         Predict step of the Kalman filter. Computes the prior values of state
@@ -185,14 +194,15 @@ class KalmanFilter:
 
         return xk_prior, Pk_prior
 
+    @beartype
     def update(
         self,
-        Hk: np.ndarray,
-        xk: np.ndarray,
-        Pk: np.ndarray,
-        zk: np.ndarray,
-        Rk: np.ndarray,
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        Hk: ArrayOrFloat,
+        xk: ArrayOrFloat,
+        Pk: ArrayOrFloat,
+        zk: ArrayOrFloat,
+        Rk: ArrayOrFloat,
+    ) -> ReturnArrayTuple:
         r"""Updates states and covariances.
 
         Update step of the Kalman filter. That is, the filter combines the
@@ -248,9 +258,10 @@ class KalmanFilter:
 
         return xk_posterior, Pk_posterior
 
+    @beartype
     def filter(
-        self, Z: np.ndarray, U: np.ndarray = None
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        self, Z: np.ndarray, U: OptionalArray = None
+    ) -> ReturnArrayTuple:
         """Run filter over Z and U.
 
         Applies the filtering process over :math:`Z` and :math:`U` and returns
@@ -306,9 +317,8 @@ class KalmanFilter:
 
         return states, errors
 
-    def smooth(
-        self, Z: np.ndarray, U: np.ndarray = None
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+    @beartype
+    def smooth(self, Z: np.ndarray, U: OptionalArray) -> ReturnArrayTuple:
         r"""Rauch-Tung-Strieble (RTS) smoother.
 
         The smoothing process refines the estimates in the light of new data.
