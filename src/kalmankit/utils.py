@@ -1,17 +1,15 @@
 """
 Convenience and utility functions for the library
 """
-import numpy as np
-from beartype import beartype
+from typing import Optional
 
-from kalmankit.typing import Boolean, OptionalArray, OptionalArrayOrFloat
+import numpy as np
 
 __all__ = ["check_none_and_broadcast", "is_nan_all"]
 
 
-@beartype
 def check_none_and_broadcast(
-    arr: OptionalArray, broad_to: np.ndarray
+    arr: Optional[np.ndarray], broad_to: np.ndarray
 ) -> np.ndarray:
     """Helper function.
 
@@ -36,13 +34,12 @@ def check_none_and_broadcast(
     return arr
 
 
-@beartype
-def is_nan_all(arr: OptionalArrayOrFloat) -> Boolean:
+def is_nan_all(arr: np.ndarray) -> bool:
     """Check if all elements of the given array are nan.
 
     Parameters
     ----------
-    arr : numpy.ndarry
+    arr : numpy.ndarray
         NumPy array to check.
 
     Return

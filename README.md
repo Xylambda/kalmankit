@@ -7,7 +7,7 @@
 ![GitHub issues](https://img.shields.io/github/issues/Xylambda/kalmankit?style=badge)
 ![workflow](https://github.com/Xylambda/kalmankit/actions/workflows/cicd.yaml/badge.svg)
 [![doc](https://img.shields.io/badge/DOCS-documentation-blue.svg?style=badge)](https://xylambda.github.io/kalmankit/)
-[![bear-ified](https://raw.githubusercontent.com/beartype/beartype-assets/main/badge/bear-ified.svg)](https://beartype.readthedocs.io)!
+[![bear-ified](https://raw.githubusercontent.com/beartype/beartype-assets/main/badge/bear-ified.svg)](https://beartype.readthedocs.io)
 
 The Kalman filter is an optimal estimation algorithm: it estimates the true 
 state of a signal given that this signal is noisy and/or incomplete. This 
@@ -64,7 +64,7 @@ If you've used this library for your projects please cite it:
 
 ```latex
 @misc{alejandro2021kalmankit,
-  title={kalmankit - Multidimensional implementation of Kalman Filter algorithm},
+  title={kalmankit - Multidimensional implementation of Kalman Filter algorithms},
   author={Alejandro Pérez-Sanjuán},
   year={2021},
   howpublished={\url{https://github.com/Xylambda/kalmankit}},

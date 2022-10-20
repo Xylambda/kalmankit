@@ -1,15 +1,8 @@
 """ Implementation of the extended Kalman filter algorithm"""
-from typing import Callable, List
+from typing import Callable, List, Optional, Tuple
 
 import numpy as np
-from beartype import beartype
 
-from kalmankit.typing import (
-    ArrayOrFloat,
-    OptionalArray,
-    OptionalArrayOrFloat,
-    ReturnArrayTuple,
-)
 from kalmankit.utils import check_none_and_broadcast
 
 __all__ = ["ExtendedKalmanFilter"]
@@ -122,7 +115,6 @@ class ExtendedKalmanFilter:
     filter will not work properly.
     """
 
-    @beartype
     def __init__(
         self,
         xk: np.ndarray,
@@ -148,14 +140,9 @@ class ExtendedKalmanFilter:
         self.__I = np.identity(self.state_size)
         self.kalman_gains: List[np.ndarray] = []
 
-    @beartype
     def predict(
-        self,
-        xk: ArrayOrFloat,
-        uk: OptionalArrayOrFloat,
-        Pk: ArrayOrFloat,
-        Qk: ArrayOrFloat,
-    ) -> ReturnArrayTuple:
+        self, xk: np.ndarray, uk: np.ndarray, Pk: np.ndarray, Qk: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
         r"""Predicts states and covariances.
 
         Predict step of the Kalman filter. Computes the prior values of state
@@ -198,14 +185,9 @@ class ExtendedKalmanFilter:
 
         return xk_prior, Pk_prior
 
-    @beartype
     def update(
-        self,
-        xk: ArrayOrFloat,
-        Pk: ArrayOrFloat,
-        zk: ArrayOrFloat,
-        Rk: ArrayOrFloat,
-    ) -> ReturnArrayTuple:
+        self, xk: np.ndarray, Pk: np.ndarray, zk: np.ndarray, Rk: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
         r"""Updates states and covariances.
 
         Update step of the Kalman filter. That is, the filter combines the
@@ -262,10 +244,9 @@ class ExtendedKalmanFilter:
 
         return xk_posterior, Pk_posterior
 
-    @beartype
     def filter(
-        self, Z: np.ndarray, U: OptionalArray = None
-    ) -> ReturnArrayTuple:
+        self, Z: np.ndarray, U: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Run filter over Z and U.
 
         Applies the filtering process over :math:`Z` and :math:`U` and returns
@@ -319,8 +300,9 @@ class ExtendedKalmanFilter:
 
         return states, errors
 
-    @beartype
-    def smooth(self, Z: np.ndarray, U: OptionalArray) -> ReturnArrayTuple:
+    def smooth(
+        self, Z: np.ndarray, U: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Extended Rauch-Tung-Strieble (RTS) smoother."""
         # TODO: https://github.com/EEA-sensors/Bayesian-Filtering-and
         # Smoothing/blob/main/python/example_notebooks/pendulum_ekf.ipynb
