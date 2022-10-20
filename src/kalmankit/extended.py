@@ -1,5 +1,5 @@
 """ Implementation of the extended Kalman filter algorithm"""
-from typing import Callable, List, Tuple
+from typing import Callable, List, Optional, Tuple
 
 import numpy as np
 
@@ -245,8 +245,8 @@ class ExtendedKalmanFilter:
         return xk_posterior, Pk_posterior
 
     def filter(
-        self, Z: np.ndarray, U: np.ndarray = None
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        self, Z: np.ndarray, U: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Run filter over Z and U.
 
         Applies the filtering process over :math:`Z` and :math:`U` and returns
@@ -301,8 +301,8 @@ class ExtendedKalmanFilter:
         return states, errors
 
     def smooth(
-        self, Z: np.ndarray, U: np.ndarray = None
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        self, Z: np.ndarray, U: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Extended Rauch-Tung-Strieble (RTS) smoother."""
         # TODO: https://github.com/EEA-sensors/Bayesian-Filtering-and
         # Smoothing/blob/main/python/example_notebooks/pendulum_ekf.ipynb

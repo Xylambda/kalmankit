@@ -63,7 +63,7 @@ If you've used this library for your projects please cite it:
 
 ```latex
 @misc{alejandro2021kalmankit,
-  title={kalmankit - Multidimensional implementation of Kalman Filter algorithm},
+  title={kalmankit - Multidimensional implementation of Kalman Filter algorithms},
   author={Alejandro Pérez-Sanjuán},
   year={2021},
   howpublished={\url{https://github.com/Xylambda/kalmankit}},

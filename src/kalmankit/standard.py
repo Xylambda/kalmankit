@@ -1,5 +1,5 @@
 """ Vanilla implementation of the standard Kalman filter algorithm"""
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -249,8 +249,8 @@ class KalmanFilter:
         return xk_posterior, Pk_posterior
 
     def filter(
-        self, Z: np.ndarray, U: np.ndarray = None
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        self, Z: np.ndarray, U: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Run filter over Z and U.
 
         Applies the filtering process over :math:`Z` and :math:`U` and returns
@@ -307,8 +307,8 @@ class KalmanFilter:
         return states, errors
 
     def smooth(
-        self, Z: np.ndarray, U: np.ndarray = None
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+        self, Z: np.ndarray, U: Optional[np.ndarray] = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
         r"""Rauch-Tung-Strieble (RTS) smoother.
 
         The smoothing process refines the estimates in the light of new data.
@@ -351,8 +351,7 @@ class KalmanFilter:
 
         # to avoid the filter failing
         U = check_none_and_broadcast(U, Z)
-        B = np.zeros_like(U)
-        B[:] = np.nan
+        B = np.full_like(U, np.nan)
 
         n_obs = len(Z)
         for k in range(n_obs - 2, -1, -1):

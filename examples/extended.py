@@ -20,13 +20,16 @@ def generate_observations(f, h, size=100):
     Generate observations using nonlinear discrete differentiable functions
     f and h.
     """
-    x = np.random.rand(size)
-    u = np.random.rand(size)
-    qk = np.random.normal(loc=0, scale=0.005, size=size)
-    rk = np.random.normal(loc=0, scale=0.01, size=size)
+    X = np.random.rand(size)
+    U = np.random.rand(size)
+    Q = np.random.normal(loc=0, scale=0.005, size=size)
+    R = np.random.normal(loc=0, scale=0.01, size=size)
 
-    _xk = f(x, u) + qk
-    Z = h(_xk) + rk
+    Z = np.empty_like(X)
+    for k, (xk, uk, qk, rk) in enumerate(zip(X, U, Q, R)):
+        xk_ = f(xk, uk) + qk
+        zk = h(xk_) + rk
+        Z[k] = zk
 
     return Z
 
@@ -85,10 +88,6 @@ def main():
     states, errors = ekf.filter(Z=Z, U=U)
     kalman_gain = np.stack([val.item() for val in ekf.kalman_gains])
 
-    # as array
-    states = np.stack([val.item() for val in states])
-    errors = np.stack([val.item() for val in errors])
-
     # plot
     fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(15,4))
     ax[0].plot(Z, label="Observations")
@@ -96,7 +95,7 @@ def main():
     ax[0].set_title('Estimated means over signal')
     ax[0].legend()
 
-    ax[1].plot(errors)
+    ax[1].plot(errors.flatten())
     ax[1].set_title('Covariances')
 
     ax[2].plot(kalman_gain)
