@@ -10,7 +10,7 @@ jobs:
   build_docs_job:
     runs-on: ubuntu-latest
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.PUSH_TOKEN }}
 
     steps:
       - name: Checkout
