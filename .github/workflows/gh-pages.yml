@@ -39,6 +39,7 @@ jobs:
         run: |
           cd docs/build/html/
           git init
+          git remote add origin https://${{ secrets.PUSH_TOKEN }}$@github.com/Xylambda/kalmankit
           git config --global --add safe.directory /github/workspace/docs/build/html
           touch .nojekyll
           git add -A
