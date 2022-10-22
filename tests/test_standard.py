@@ -52,18 +52,15 @@ def test_filter():
     kf = KalmanFilter(A=A, xk=xk, B=B, Pk=Pk, H=H, Q=Q, R=R)
     states, covariances = kf.filter(Z=Z, U=U)
 
-    states = np.stack([val.item() for val in states])
-    covariances = np.stack([val.item() for val in covariances])
-
     np.testing.assert_allclose(
-        states, 
+        states.flatten(), 
         expected_states, 
         rtol=1e-06, 
         atol=0
     )
 
     np.testing.assert_allclose(
-        covariances, 
+        covariances.flatten(), 
         expected_covariances, 
         rtol=1e-06, 
         atol=0
