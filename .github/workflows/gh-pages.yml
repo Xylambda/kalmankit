@@ -39,7 +39,7 @@ jobs:
         run: |
           cd docs/build/html/
           git init
-          git remote add origin https://${{ secrets.PUSH_TOKEN }}$@github.com/Xylambda/kalmankit
+          git remote add origin https://${{ secrets.PUSH_TOKEN }}@github.com/Xylambda/kalmankit
           git config --global --add safe.directory /github/workspace/docs/build/html
           touch .nojekyll
           git add -A
@@ -50,7 +50,7 @@ jobs:
       - name: Force push to destination branch
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.PUSH_TOKEN }}$
+          github_token: ${{ secrets.PUSH_TOKEN }}
           branch: gh-pages
           force: true
           directory: ./docs/build/html
