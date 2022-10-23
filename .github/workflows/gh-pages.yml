@@ -6,11 +6,6 @@ on:
       - master
       - develop
 
-permissions:
-  actions: write
-  pages: write
-  contents: write
-
 jobs:
   build_docs_job:
     runs-on: ubuntu-latest
