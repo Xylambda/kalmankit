@@ -43,7 +43,7 @@ pytest -v tests/
 The library provides 3 examples of usage:
 1. [Moving Average](examples/moving_average.py)
 2. [Market Beta estimation](examples/market_beta.py)
-3. [Extended Kalman Filter](examples/extended.py)
+3. [Pendulum estimation with EKF](examples/pendulum.py)
 
 A `requirements-example.txt` is provided to install the needed dependencies to
 run the examples.

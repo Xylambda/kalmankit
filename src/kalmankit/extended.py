@@ -237,7 +237,7 @@ class ExtendedKalmanFilter:
         self.kalman_gains.append(Kk)
 
         # update estimate via zk
-        xk_posterior = xk + Kk @ (zk - self.h(xk))
+        xk_posterior = xk + Kk @ np.atleast_1d((zk - self.h(xk)))
 
         # update error covariance
         Pk_posterior = (self.__I - Kk @ Hk) @ Pk
