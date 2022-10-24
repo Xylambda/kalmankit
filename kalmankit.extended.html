@@ -1,0 +1,390 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+
+    <meta name="generator" content="sphinx-3.5.4, furo 2020.12.30.beta24"/>
+        <title>kalmankit.extended module - kalmankit documentation</title>
+      <link rel="stylesheet" href="_static/styles/furo.css?digest=33d2fc4f3f180ec1ffc6524e273e21d7d58cbe49">
+    <link rel="stylesheet" href="_static/pygments.css">
+    <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="_static/pygments_dark.css">
+    
+
+
+<style>
+  :root {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+
+  /* For allowing end-user-specific overrides */
+  .override-light {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  .override-dark {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+</style><link rel="stylesheet" href="_static/styles/furo-extensions.css?digest=26485485040e7aaf717c13fd0188a5ad2c2deb60">
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script defer="defer" src="_static/jquery.js"></script>
+    <script defer="defer" src="_static/underscore.js"></script>
+    <script defer="defer" src="_static/doctools.js"></script>
+    <script async="async" defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script defer src="_static/scripts/main.js?digest=e931d09b2a40c1bb82b542effe772014573baf67"></script></head>
+  <body dir="">
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z"/>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">kalmankit  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">kalmankit  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html">
+  <input class="sidebar-search" placeholder=Search name="q">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/kalmankit.standard.html">kalmankit.standard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/kalmankit.extended.html">kalmankit.extended</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <main class="main">
+    <div class="content">
+      <article role="main">
+        <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        </label>
+        <div class="section" id="module-kalmankit.extended">
+<span id="kalmankit-extended-module"></span><h1>kalmankit.extended module<a class="headerlink" href="#module-kalmankit.extended" title="Permalink to this headline">¶</a></h1>
+<p>Implementation of the extended Kalman filter algorithm</p>
+<dl class="py class">
+<dt id="kalmankit.extended.ExtendedKalmanFilter">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">kalmankit.extended.</span></code><code class="sig-name descname"><span class="pre">ExtendedKalmanFilter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jacobian_A</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jacobian_H</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kalmankit/extended.html#ExtendedKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Extended Kalman filter algorithm.</p>
+<p>The Extended Kalman Filter uses a form of feedback-control loop of two
+stages to model dynamic non-linear systems of the form:</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}x_{k} = f(x_{k-1}, u_{k-1}) + q_{k} \\
+z_{k} = h(x_{k}) + r_{k}\end{split}\]</div></div>
+<p>with <span class="math notranslate nohighlight">\(q_{k} \sim \mathcal{N}(0, Q)\)</span>,
+<span class="math notranslate nohighlight">\(r_{k} \sim \mathcal{N}(0, R)\)</span> and <span class="math notranslate nohighlight">\(f\)</span> and <span class="math notranslate nohighlight">\(h\)</span> being
+nonlinear functions.</p>
+<p>For each time step <span class="math notranslate nohighlight">\(k\)</span></p>
+<ol class="arabic simple">
+<li><p>Predict step</p></li>
+</ol>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\hat{x}_{k}^{-} = f(\hat{x}_{k-1}^{-}, u_{k-1}) \\
+P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}\end{split}\]</div></div>
+<p>with <span class="math notranslate nohighlight">\(A_{k} = \frac{\partial f}{x}\)</span> evaluated at
+<span class="math notranslate nohighlight">\(\hat{x}_{k-1}^{-}\)</span>.</p>
+<ol class="arabic simple" start="2">
+<li><p>Update step</p></li>
+</ol>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T} + R_{k})^{-1} \\
+\hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - h(\hat{x}_{k}^{-})) \\
+P_k = (I - K_k H) P_{k}^{-}\end{split}\]</div></div>
+<p>with <span class="math notranslate nohighlight">\(H_{k} = \frac{\partial h}{x}\)</span> evaluated at
+<span class="math notranslate nohighlight">\(\hat{x}_{k}^{-}\)</span>.</p>
+<p>The Extended Kalman Filter can deal with non-linear systems but it does not
+guarantee an optimal estimation unless the system is linear and the noises
+are drawn from a normal distribution, which will cause the Extended Kalman
+Filter to behave as a standard Kalman Filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xk</strong> (<em>numpy.ndarray</em>) – Initial (<span class="math notranslate nohighlight">\(k=0\)</span>) mean estimate.</p></li>
+<li><p><strong>Pk</strong> (<em>numpy.ndarray</em>) – Initial (<span class="math notranslate nohighlight">\(k=0\)</span>) covariance estimate.</p></li>
+<li><p><strong>Q</strong> (<em>numpy.ndarray</em>) – Process noise covariance (transition covariance).</p></li>
+<li><p><strong>R</strong> (<em>numpy.ndarray or float.</em>) – Measurement noise covariance (observation covariance).</p></li>
+<li><p><strong>f</strong> (<em>function</em>) – Non-linear state transition function. It is a nonlinear function that
+relates the state at the previous time step <span class="math notranslate nohighlight">\(k-1\)</span> to state at the
+current step <span class="math notranslate nohighlight">\(k\)</span>. It must receive two arguments: <span class="math notranslate nohighlight">\(xk\)</span> and
+<span class="math notranslate nohighlight">\(uk\)</span>, which are the state and the control-input.</p></li>
+<li><p><strong>h</strong> (<em>function</em>) – Non-linear observation function. It is a nonlinear function that
+relates the prior state <span class="math notranslate nohighlight">\(xk\)</span> to the measurement <span class="math notranslate nohighlight">\(zk\)</span>. It
+must receive one argument: <span class="math notranslate nohighlight">\(xk\)</span>.</p></li>
+<li><p><strong>jacobian_A</strong> (<em>function</em>) – The function that computes the jacobian of <span class="math notranslate nohighlight">\(f\)</span> with respect to
+<span class="math notranslate nohighlight">\(x\)</span>. It must receive two arguments: <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(u\)</span>.</p></li>
+<li><p><strong>jacobian_H</strong> (<em>function</em>) – The function that computes the jacobian of <span class="math notranslate nohighlight">\(h\)</span> with respect to
+<span class="math notranslate nohighlight">\(x\)</span>. It must receive one argument: <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="kalmankit.extended.ExtendedKalmanFilter.state_size">
+<code class="sig-name descname"><span class="pre">state_size</span></code><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter.state_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimensionality of the state <span class="math notranslate nohighlight">\((n)\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt id="kalmankit.extended.ExtendedKalmanFilter.I">
+<code class="sig-name descname"><span class="pre">I</span></code><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identity matrix <span class="math notranslate nohighlight">\((n x n)\)</span>. This attribute is not accessible by
+the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt id="kalmankit.extended.ExtendedKalmanFilter.kalman_gains">
+<code class="sig-name descname"><span class="pre">kalman_gains</span></code><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter.kalman_gains" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of computed Kalman gains.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>states</strong> (<em>numpy.ndarray</em>) – A posteriori state estimates for each time step.</p></li>
+<li><p><strong>errors</strong> (<em>numpy.ndarray</em>) – A posteriori estimate error covariances for each time step.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">1</span></dt>
+<dd><p>Matlab - Understanding Kalman Filters:
+<a class="reference external" href="https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr">https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr</a></p>
+</dd>
+<dt class="label" id="id2"><span class="brackets">2</span></dt>
+<dd><p>Greg Welch, Gary Bishop - An Introduction to the Kalman Filter:
+<a class="reference external" href="https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf">https://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf</a></p>
+</dd>
+<dt class="label" id="id3"><span class="brackets">3</span></dt>
+<dd><p>Tucker McClure - How Kalman Filters Work, Part 1.
+<a class="reference external" href="http://www.anuncommonlab.com/articles/how-kalman-filters-work/">http://www.anuncommonlab.com/articles/how-kalman-filters-work/</a></p>
+</dd>
+<dt class="label" id="id4"><span class="brackets">4</span></dt>
+<dd><p>Matthew B. Rhudy, Roger A. Salguero and Keaton Holappa - A Kalman
+Filtering Tutorial for Undergraduate students.
+<a class="reference external" href="https://aircconline.com/ijcses/V8N1/8117ijcses01.pdf">https://aircconline.com/ijcses/V8N1/8117ijcses01.pdf</a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please, take your time to ensure the matrices shapes are correct or the
+filter will not work properly.</p>
+</div>
+<dl class="py method">
+<dt id="kalmankit.extended.ExtendedKalmanFilter.filter">
+<code class="sig-name descname"><span class="pre">filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> → <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/kalmankit/extended.html#ExtendedKalmanFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run filter over Z and U.</p>
+<p>Applies the filtering process over <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(U\)</span> and returns
+all errors and covariances. That is: given <span class="math notranslate nohighlight">\(Z\)</span> and <span class="math notranslate nohighlight">\(U\)</span>,
+this function applies the predict and update feedback loop for each
+<span class="math notranslate nohighlight">\(zk\)</span>, where <span class="math notranslate nohighlight">\(k\)</span> is a timestamp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Z</strong> (<em>numpy.ndarray</em>) – Observed variable</p></li>
+<li><p><strong>U</strong> (<em>numpy.ndarray, optional, default: None</em>) – Control-input vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>states</strong> (<em>list of numpy.ndarray</em>) – A posteriori state estimates for each time step <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>errors</strong> (<em>list of numpy.ndarray</em>) – A posteriori estimate error covariances for each time step
+<span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="kalmankit.extended.ExtendedKalmanFilter.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Qk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> → <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/kalmankit/extended.html#ExtendedKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts states and covariances.</p>
+<p>Predict step of the Kalman filter. Computes the prior values of state
+and covariance using the previous timestep (if any).</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}\hat{x}_{k}^{-} = f(\hat{x}_{k-1}^{-}, u_{k-1}) \\
+P_{k}^{-} = A_{k}P_{k-1}A_{k}^{T} + Q_{k}\end{split}\]</div></div>
+<p>Here, the output are the <cite>a priori</cite> or predicted estimates of the mean
+<span class="math notranslate nohighlight">\(\hat{x}_{k}^{-}\)</span> and covariance <span class="math notranslate nohighlight">\(P_{k}^{-}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xk</strong> (<em>numpy.ndarray</em>) – Mean estimate at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>uk</strong> (<em>numpy.ndarray</em>) – Control-input vector at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>Pk</strong> (<em>numpy.ndarray</em>) – Covariance estimate at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>Qk</strong> (<em>numpy.ndarray</em>) – Process noise covariance at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>xk_prior</strong> (<em>numpy.ndarray</em>) – Prior value of state mean.</p></li>
+<li><p><strong>Pk_prior</strong> (<em>numpy.ndarray</em>) – Prior value of state covariance.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="kalmankit.extended.ExtendedKalmanFilter.smooth">
+<code class="sig-name descname"><span class="pre">smooth</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> → <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/kalmankit/extended.html#ExtendedKalmanFilter.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extended Rauch-Tung-Strieble (RTS) smoother.</p>
+</dd></dl>
+<dl class="py method">
+<dt id="kalmankit.extended.ExtendedKalmanFilter.update">
+<code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> → <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/kalmankit/extended.html#ExtendedKalmanFilter.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kalmankit.extended.ExtendedKalmanFilter.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates states and covariances.</p>
+<p>Update step of the Kalman filter. That is, the filter combines the
+predictions with the observed variable <span class="math notranslate nohighlight">\(Z\)</span> at time <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\begin{split}K_k = P_{k}^{-} H_{k}^{T} (H_{k} P_{k}^{-} H_{k}^{T}+R_{k})^{-1} \\
+\hat{x}_{k} = \hat{x}_{k}^{-} + K_k (z_k - h(\hat{x}_{k}^{-})) \\
+P_k = (I - K_k H) P_{k}^{-}\end{split}\]</div></div>
+<p>Here, the output are the <cite>a posteriori</cite> or corrected estimates of the
+mean <span class="math notranslate nohighlight">\(\hat{x}_{k}\)</span> and covariance <span class="math notranslate nohighlight">\(P_k\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xk</strong> (<em>numpy.ndarray</em>) – Prior mean state estimate at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>Pk</strong> (<em>numpy.ndarray</em>) – Prior covariance state estimate at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>zk</strong> (<em>numpy.ndarray</em>) – Observation at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>Rk</strong> (<em>numpy.ndarray</em>) – Measurement noise covariance at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>xk_posterior</strong> (<em>numpy.ndarray</em>) – A posteriori estimate error mean at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><strong>Pk_posterior</strong> (<em>numpy.ndarray</em>) – A posteriori estimate error covariance at time <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The original formula to compute the Kalman gain would be implemented as
+<cite>Kk = Pk @ (Hk.T @ np.linalg.pinv(Sk))</cite>. Instead, a linear matrix is
+solved due to being a more efficient and precise way.</p>
+</dd></dl>
+</dd></dl>
+</div>
+
+      </article>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2021, Alejandro Pérez-Sanjuán
+            |
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+              and
+              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            |
+            <a class="muted-link" href="_sources/kalmankit.extended.rst.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </main>
+</div>
+  </body>
+</html>
