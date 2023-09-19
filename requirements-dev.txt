@@ -1,7 +1,7 @@
 -r requirements.txt
 -r requirements-doc.txt
 
-pykalman-bardo==0.9.6  # for testing purposes
+pykalman-bardo==0.9.7  # for testing purposes
 pytest==5.0.1
 isort
 black
