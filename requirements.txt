@@ -1,6 +1,6 @@
 certifi==2022.12.7
 joblib==1.2.0
 numpy==1.22.0
-scipy==1.5.4
+scipy==1.10.0
 threadpoolctl==2.1.0
 typing-extensions==3.10.0.0
