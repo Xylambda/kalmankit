@@ -1,4 +1,4 @@
-certifi==2023.7.22
+certifi==2024.7.4
 joblib==1.2.0
 numpy==1.22.0
 scipy==1.10.0
