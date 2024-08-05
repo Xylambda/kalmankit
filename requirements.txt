@@ -1,6 +1,1 @@
-certifi==2024.7.4
-joblib==1.2.0
-numpy==1.22.0
-scipy==1.10.0
-threadpoolctl==2.1.0
-typing-extensions==3.10.0.0
+numpy==2.0.1

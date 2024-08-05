@@ -1,6 +1,7 @@
 """
 Convenience and utility functions for the library
 """
+
 from typing import Optional
 
 import numpy as np

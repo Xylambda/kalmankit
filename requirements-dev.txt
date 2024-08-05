@@ -1,7 +1,19 @@
 -r requirements.txt
 -r requirements-doc.txt
 
-pykalman-bardo==0.9.7  # for testing purposes
-pytest==5.0.1
-isort
-black
+black==24.8.0
+click==8.1.7
+iniconfig==2.0.0
+isort==5.13.2
+flake8==7.1.1
+mypy-extensions==1.0.0
+numpy==2.0.1
+packaging==24.1
+pathspec==0.12.1
+platformdirs==4.2.2
+pluggy==1.5.0
+pycodestyle==2.12.1
+pyflakes==3.2.0
+pykalman-bardo==0.9.7
+pytest==8.3.2
+scipy==1.14.0
