@@ -1,4 +1,4 @@
-﻿kalmankit.extended
+kalmankit.extended
 ==================
 
 .. automodule:: kalmankit.extended

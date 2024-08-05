@@ -1,4 +1,5 @@
 """ Implementation of the extended Kalman filter algorithm"""
+
 from typing import Callable, List, Optional, Tuple
 
 import numpy as np
@@ -279,15 +280,17 @@ class ExtendedKalmanFilter:
 
         # allow U to be None without the filter failing
         U = check_none_and_broadcast(U, Z)
+        predict_func = self.predict
+        update_func = self.update
 
         # feedback-control loop
         _iterable = zip(U, Z, self.Q, self.R)
         for k, (uk, zk, Qk, Rk) in enumerate(_iterable):
             # predict step, get prior estimates
-            xk_prior, Pk_prior = self.predict(xk=xk, uk=uk, Pk=Pk, Qk=Qk)
+            xk_prior, Pk_prior = predict_func(xk=xk, uk=uk, Pk=Pk, Qk=Qk)
 
             # update step, correct prior estimates
-            xk_posterior, Pk_posterior = self.update(
+            xk_posterior, Pk_posterior = update_func(
                 xk=xk_prior, Pk=Pk_prior, zk=zk, Rk=Rk
             )
 
@@ -303,7 +306,7 @@ class ExtendedKalmanFilter:
     def smooth(
         self, Z: np.ndarray, U: Optional[np.ndarray] = None
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Extended Rauch-Tung-Strieble (RTS) smoother."""
+        """Extended Rauch-Tung-Striebel (RTS) smoother."""
         # TODO: https://github.com/EEA-sensors/Bayesian-Filtering-and
         # Smoothing/blob/main/python/example_notebooks/pendulum_ekf.ipynb
         raise NotImplementedError

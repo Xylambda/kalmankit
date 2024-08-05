@@ -1,4 +1,4 @@
-﻿kalmankit.standard
+kalmankit.standard
 ==================
 
 .. automodule:: kalmankit.standard

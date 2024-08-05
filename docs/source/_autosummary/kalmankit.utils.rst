@@ -1,4 +1,4 @@
-﻿kalmankit.utils
+kalmankit.utils
 ===============
 
 .. automodule:: kalmankit.utils
