@@ -146,7 +146,7 @@
 
 
 <div class="viewcode-block" id="ExtendedKalmanFilter"><a class="viewcode-back" href="../../kalmankit.extended.html#kalmankit.ExtendedKalmanFilter">[docs]</a><span class="k">class</span> <span class="nc">ExtendedKalmanFilter</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">"""Extended Kalman filter algorithm.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Extended Kalman filter algorithm.</span>
 
 <span class="sd">    The Extended Kalman Filter uses a form of feedback-control loop of two</span>
 <span class="sd">    stages to model dynamic non-linear systems of the form:</span>
@@ -280,7 +280,7 @@
 <div class="viewcode-block" id="ExtendedKalmanFilter.predict"><a class="viewcode-back" href="../../kalmankit.extended.html#kalmankit.ExtendedKalmanFilter.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">xk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">uk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Pk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Qk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sa">r</span><span class="sd">"""Predicts states and covariances.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Predicts states and covariances.</span>
 
 <span class="sd">        Predict step of the Kalman filter. Computes the prior values of state</span>
 <span class="sd">        and covariance using the previous timestep (if any).</span>
@@ -325,7 +325,7 @@
 <div class="viewcode-block" id="ExtendedKalmanFilter.update"><a class="viewcode-back" href="../../kalmankit.extended.html#kalmankit.ExtendedKalmanFilter.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">xk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Pk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">zk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Rk</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sa">r</span><span class="sd">"""Updates states and covariances.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Updates states and covariances.</span>
 
 <span class="sd">        Update step of the Kalman filter. That is, the filter combines the</span>
 <span class="sd">        predictions with the observed variable :math:`Z` at time :math:`k`.</span>
@@ -384,7 +384,7 @@
 <div class="viewcode-block" id="ExtendedKalmanFilter.filter"><a class="viewcode-back" href="../../kalmankit.extended.html#kalmankit.ExtendedKalmanFilter.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">U</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sd">"""Run filter over Z and U.</span>
+<span class="w">        </span><span class="sd">"""Run filter over Z and U.</span>
 
 <span class="sd">        Applies the filtering process over :math:`Z` and :math:`U` and returns</span>
 <span class="sd">        all errors and covariances. That is: given :math:`Z` and :math:`U`,</span>
@@ -440,7 +440,7 @@
 <div class="viewcode-block" id="ExtendedKalmanFilter.smooth"><a class="viewcode-back" href="../../kalmankit.extended.html#kalmankit.ExtendedKalmanFilter.smooth">[docs]</a>    <span class="k">def</span> <span class="nf">smooth</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">U</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sd">"""Extended Rauch-Tung-Strieble (RTS) smoother."""</span>
+<span class="w">        </span><span class="sd">"""Extended Rauch-Tung-Strieble (RTS) smoother."""</span>
         <span class="c1"># TODO: https://github.com/EEA-sensors/Bayesian-Filtering-and</span>
         <span class="c1"># Smoothing/blob/main/python/example_notebooks/pendulum_ekf.ipynb</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
