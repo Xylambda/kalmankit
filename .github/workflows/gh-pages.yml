@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Python Set Up
         uses: actions/setup-python@v4
@@ -49,6 +49,7 @@ jobs:
 
       - name: Force push to destination branch
         uses: ad-m/github-push-action@v0.6.0
+        uses: github-actions-x/commit@v3.1
         with:
           github_token: ${{ secrets.PUSH_TOKEN }}
           branch: gh-pages
