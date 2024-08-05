@@ -51,7 +51,7 @@ jobs:
           git commit -m 'deploy'
 
       - name: Force push to destination branch
-        uses: github-actions-x/commit@v3.1
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.PUSH_TOKEN }}
           branch: gh-pages
