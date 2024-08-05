@@ -1,6 +1,6 @@
 .. This file has been created by automatically.
 
-.. currentmodule:: kalmanfilter
+.. currentmodule:: kalmankit
 
 =============
 API reference

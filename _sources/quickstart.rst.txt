@@ -8,11 +8,11 @@ Kalman Filter using NumPy.
 The current version of the library supports the standard and extended Kalman
 Filter. To use them, one has to import the library and configure correctly the
 filter  parameters. Make sure the parameters configuration is correct or the
-filter will not work.
+filter will not work properly.
 
-Here, we are going to define a Kalman Filter to act as a weighted moving 
-average. For this example we will create a noisy sine wave function to generate
-noisy observations:
+We review in this page the basic usage of kalmankit library. We are going to
+define a Kalman Filter to act as a weighted moving average. For this example we
+will create a noisy sine wave function to generate noisy observations:
 
 >>> import numpy as np
 >>> import matplotlib.pyplot as plt
@@ -56,7 +56,7 @@ Now we can define our filter and its parameters. The :math:`A` matrix
 represents the transition matrix; it is the state-transition model we use to
 relate the state at time :math:`k-1` with the state at time :math:`k`. Because
 we want to model a martingale, the next state should be set to be the current 
-state plus some noise.
+state (plus some noise that is added in the filter).
 
 >>> A = np.expand_dims(np.ones((len(Z),1)), axis=1) # transition matrix
 
@@ -81,8 +81,8 @@ start somewhere.
 >>> xk = np.array([[1]]) # initial mean estimate
 >>> Pk = np.array([[1]]) # initial covariance estimate
 
-It is not crucial to find optimal values for the initial estimates since the 
-Kalman filter will quickly converge, but it helps to the process.
+The convergence process can be greatly improved by a good selection of values
+for these parameters.
 
 Finally, we need to define the noise covariances. The :math:`Q` parameter is 
 the process noise covariance. Remember that :math:`q_{k} \sim \mathcal{N}(0, Q)`.
@@ -106,6 +106,10 @@ of the feedback-control loop.
 
 >>> states, errors = kf.filter(Z=Z, U=U)
 
-The library also provides with a smoothing algorithm:
+The library also provides with a smoothing algorithm (currently only for
+standard filter):
 
 >>> states, errors = kf.smooth(Z=Z, U=U)
+
+For more information about the notation, please read the corresponding
+documentation of each one of the filter options.

@@ -4,26 +4,9 @@
 .. automodule:: kalmankit.extended
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       ExtendedKalmanFilter
    
-   
-
-   
-   
-   
-
-
-
