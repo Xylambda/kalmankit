@@ -54,6 +54,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.PUSH_TOKEN }}
-          branch: gh-pages
-          force: true
-          directory: ./docs/build/html
+          publish_branch: gh-pages
+          destination_dir: ./docs/build/html
