@@ -1,8 +1,17 @@
-﻿kalmankit.standard
+kalmankit.standard
 ==================
 
 .. automodule:: kalmankit.standard
 
+   
+   
+   
+
+   
+   
+   
+
+   
    
    .. rubric:: Classes
 
@@ -10,3 +19,11 @@
    
       KalmanFilter
    
+   
+
+   
+   
+   
+
+
+
