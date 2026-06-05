@@ -6,7 +6,7 @@ by Simo Särkkä: Example 5.1 of Bayesian Filtering and Smoothing.
 The Unofficial associated code for the book was als used:
 https://github.com/EEA-sensors/Bayesian-Filtering-and-Smoothing
 
-To generate the observations we have to use the equations that define the 
+To generate the observations we have to use the equations that define the
 system:
 
 xk = f(xk-1, uk-1) + qk
@@ -14,9 +14,9 @@ zk = h(xk) + rk
 
 Then, we set the parameters and the jacobian matrices.
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.special import erfcinv
 from kalmankit import ExtendedKalmanFilter
 
 # constants
@@ -36,8 +36,8 @@ def jacobian_A(xk, uk=None):
     """
     arr = np.array([[1, DT], [-G * np.cos(xk[0]) * DT, 1]])
     return arr
-    
-    
+
+
 def h(xk):
     return np.sin(xk[0])
 
@@ -46,33 +46,27 @@ def jacobian_H(xk):
     """
     Jacobian of h with respect to x.
     """
-    jac = np.array([[np.cos(xk[0]), 0.]])
+    jac = np.array([[np.cos(xk[0]), 0.0]])
     return jac
 
 
 def generate_observations(f, h, qk, rk, size=100):
     # -------------------------------------------------------------------------
     # initial mean estimate
-    xk = np.array([1.5, 0.])
-    
-    # define noises
-    cholesky_qk = np.linalg.cholesky(qk)
+    xk = np.array([1.5, 0.0])
 
-    # -------------------------------------------------------------------------
-    # generate observations
-    Z = np.empty((size, 2))
+    Z = np.empty(size)
     X = np.empty((size, 2))
     for k in range(0, size):
-        
-        noise = erfcinv(2 * np.random.rand(2))
-        
-        xk_ = f(xk, None) + cholesky_qk @ noise
-        zk = h(xk_) + np.sqrt(rk)
-        Z[k] = np.sin(zk) + np.sqrt(rk) + noise
+        process_noise = np.random.multivariate_normal(np.zeros(2), qk)
+        observation_noise = np.random.normal(scale=np.sqrt(rk))
+
+        xk_ = f(xk, None) + process_noise
+        Z[k] = h(xk_) + observation_noise
         X[k] = xk_
 
         xk = xk_
-    
+
     time = np.arange(DT, (size + 1) * DT, DT)
 
     return Z, X, time
@@ -80,20 +74,10 @@ def generate_observations(f, h, qk, rk, size=100):
 
 def main():
     # -------------------------------------------------------------------------
-    xk = np.array([1.5, 0.])
-    Pk = np.array(
-        [
-            [0.1, 0.], 
-            [0., 0.1]
-        ]
-    )
+    xk = np.array([1.5, 0.0])
+    Pk = np.array([[0.1, 0.0], [0.0, 0.1]])
 
-    qk  = 0.01 * np.array(
-        [
-            [DT ** 3 / 3, DT ** 2 / 2], 
-            [DT ** 2 / 2, DT]
-        ]
-    )
+    qk = 0.01 * np.array([[DT**3 / 3, DT**2 / 2], [DT**2 / 2, DT]])
     rk = 0.1
 
     Z, true_X, time = generate_observations(f, h, qk=qk, rk=0.01, size=500)
@@ -113,19 +97,13 @@ def main():
         jacobian_H=jacobian_H,
     )
 
-    states, errors = ekf.filter(Z[:, 0], None)
+    states, errors = ekf.filter(Z, None)
 
     # -------------------------------------------------------------------------
     fig, ax = plt.subplots(figsize=(15, 7))
-    ax.scatter(time, Z[:, 0], alpha=0.5, label="Observations")
+    ax.scatter(time, Z, alpha=0.5, label="Observations")
     ax.plot(time, true_X[:, 0], color="red", label="True State")
-    ax.plot(
-        time,
-        states[:, 0],
-        color="orange",
-        label="EKF Estimate",
-        linestyle="--"
-    )
+    ax.plot(time, states[:, 0], color="orange", label="EKF Estimate", linestyle="--")
     ax.grid(True, alpha=0.5)
     ax.set_title("EKF Pendulum", fontsize=25)
     ax.legend()

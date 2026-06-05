@@ -1,4 +1,4 @@
-""" Vanilla implementation of the standard Kalman filter algorithm"""
+"""Vanilla implementation of the standard Kalman filter algorithm"""
 
 from typing import List, Optional, Tuple
 
@@ -182,7 +182,7 @@ class KalmanFilter:
             xk_prior = Ak @ xk + Bk @ uk
 
         # project error covariance ahead
-        Pk_prior = Ak @ ((Pk @ Ak.T) + Qk)
+        Pk_prior = Ak @ (Pk @ Ak.T) + Qk
 
         return xk_prior, Pk_prior
 
@@ -354,8 +354,8 @@ class KalmanFilter:
 
         # to avoid the filter failing
         U = check_none_and_broadcast(U, Z)
-        B = np.full_like(U, np.nan)
         A = self.A
+        B = self.B
         Q = self.Q
 
         predict_func = self.predict
@@ -363,10 +363,10 @@ class KalmanFilter:
         n_obs = len(Z)
         for k in range(n_obs - 2, -1, -1):
             # select appropiate parameters for each time step
-            Ak = A[k]
-            Qk = Q[k]
-            Bk = B[k]
-            uk = U[k]
+            Ak = A[k + 1]
+            Qk = Q[k + 1]
+            Bk = B[k + 1]
+            uk = U[k + 1]
             Pk = P_est[k]
             xk = x_est[k]
 
@@ -376,12 +376,10 @@ class KalmanFilter:
             )
 
             # smooth (like butter) process
-            Kk = P_est[k] @ (
-                np.linalg.solve(Pk_ahead.T @ Pk_ahead, Ak.T) @ Pk_ahead.T
-            )
+            Kk = np.linalg.solve(Pk_ahead.T, (Pk @ Ak.T).T).T
             xk_smooth[k] = x_est[k] + Kk @ (xk_smooth[k + 1] - xk_ahead)
             Pk_smooth[k] = P_est[k] + Kk @ (
-                (Pk_smooth[k + 1] - Pk_ahead.T) @ Kk
+                (Pk_smooth[k + 1] - Pk_ahead) @ Kk.T
             )
 
         return xk_smooth, Pk_smooth

@@ -1,4 +1,4 @@
-""" Multidimensional implementation of the Kalman Filter algorithm. """
+"""Multidimensional implementation of the Kalman Filter algorithm."""
 
 from . import utils
 from ._version import get_versions

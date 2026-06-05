@@ -15,13 +15,21 @@ Developer installation
 ----------------------
 
 If you intend to use the library as a developer, you should clone the
-repository and then install the library as an editable, using the requirements
-file to build your environment:
+repository and then install the library as an editable with the development
+extra:
 
 .. code-block:: bash
 
    git clone https://github.com/Xylambda/kalmankit.git
-   pip install -e kalmankit/. -r kalmankit/requirements-dev.txt
+   pip install -e "kalmankit/.[dev]"
+
+Optional dependency groups are also available for narrower workflows:
+
+.. code-block:: bash
+
+   pip install -e ".[test]"
+   pip install -e ".[docs]"
+   pip install -e ".[examples]"
 
 
 Running tests
@@ -32,4 +40,4 @@ example:
 
 .. code-block:: bash
 
-   pytest -vv tests/. --color=yes
+   python -m pytest -vv tests --color=yes

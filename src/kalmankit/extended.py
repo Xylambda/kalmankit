@@ -1,4 +1,4 @@
-""" Implementation of the extended Kalman filter algorithm"""
+"""Implementation of the extended Kalman filter algorithm"""
 
 from typing import Callable, List, Optional, Tuple
 
@@ -182,7 +182,7 @@ class ExtendedKalmanFilter:
         xk_prior = self.f(xk, uk)
 
         # project error covariance ahead
-        Pk_prior = Ak @ ((Pk @ Ak.T) + Qk)
+        Pk_prior = Ak @ (Pk @ Ak.T) + Qk
 
         return xk_prior, Pk_prior
 
@@ -306,7 +306,74 @@ class ExtendedKalmanFilter:
     def smooth(
         self, Z: np.ndarray, U: Optional[np.ndarray] = None
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Extended Rauch-Tung-Striebel (RTS) smoother."""
-        # TODO: https://github.com/EEA-sensors/Bayesian-Filtering-and
-        # Smoothing/blob/main/python/example_notebooks/pendulum_ekf.ipynb
-        raise NotImplementedError
+        r"""Extended Rauch-Tung-Striebel (RTS) smoother.
+
+        The smoothing process refines the estimates in the light of new data.
+        Formally, for each time step :math:`k`, the extended smoothing process
+        can be described as
+
+        .. math::
+
+            x_{k+1}^{-} = f(x_{k}, u_{k}) \\
+            P_{k+1}^{-} = A_{k} P_{k} A_{k}^{T} + Q_{k} \\
+            G_{k} = P_{k} A_{k}^{T} \left( P_{k+1}^{-} \right)^{-1} \\
+            x_{k}^{s} = x_{k}+G_{k} \left( x_{k+1}^{s} - x_{k+1}^{-} \right) \\
+            P_{k}^{s} = P_{k} + G_{k} \left( P_{k+1}^{s} - P_{k+1}^{-}
+            \right) G_{k}^{T}
+
+        with :math:`A_{k} = \frac{\partial f}{x}` evaluated at the filtered
+        mean :math:`x_{k}` and control-input :math:`u_{k}`. This smoother is
+        the nonlinear extension of the RTS smoother: if :math:`f` and
+        :math:`h` are linear, the result is the standard RTS smoother.
+
+        Parameters
+        ----------
+        Z : numpy.ndarray
+            Observed variable
+        U : numpy.ndarray, optional, default: None
+            Control-input vector.
+
+        Returns
+        -------
+        xk_smooth : list of numpy.ndarray
+            Smoothed means for each time step :math:`k`.
+        Pk_smooth : list of numpy.ndarray
+            Smoothed error covariances for each time step :math:`k`.
+        """
+        # filtering process to get posteriors
+        x_est, P_est = self.filter(Z=Z, U=U)
+
+        # mean and covariance array allocation
+        xk_smooth = np.zeros((len(Z), self.state_size))
+        Pk_smooth = np.zeros((len(Z), self.state_size, self.state_size))
+
+        # smooth initialization
+        xk_smooth[-1] = x_est[-1]
+        Pk_smooth[-1] = P_est[-1]
+
+        # to avoid the filter failing
+        U = check_none_and_broadcast(U, Z)
+        Q = self.Q
+
+        predict_func = self.predict
+
+        n_obs = len(Z)
+        for k in range(n_obs - 2, -1, -1):
+            # select appropiate parameters for each time step
+            Qk = Q[k + 1]
+            uk = U[k + 1]
+            Pk = P_est[k]
+            xk = x_est[k]
+
+            # predicted mean and covariance
+            xk_ahead, Pk_ahead = predict_func(xk=xk, uk=uk, Pk=Pk, Qk=Qk)
+
+            # jacobian of f with respect to x evaluated at xk
+            Ak = self.jacobian_A(xk, uk)
+
+            # smooth process
+            Kk = np.linalg.solve(Pk_ahead.T, (Pk @ Ak.T).T).T
+            xk_smooth[k] = x_est[k] + Kk @ (xk_smooth[k + 1] - xk_ahead)
+            Pk_smooth[k] = P_est[k] + Kk @ ((Pk_smooth[k + 1] - Pk_ahead) @ Kk.T)
+
+        return xk_smooth, Pk_smooth

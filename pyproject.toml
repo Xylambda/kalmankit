@@ -1,3 +1,100 @@
 [build-system]
-requires = ["setuptools", "wheel", "versioneer[toml]==0.26"]
+requires = ["setuptools>=64", "wheel", "versioneer[toml]==0.26"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "kalmankit"
+dynamic = ["version"]
+description = "Multidimensional implementation of Kalman Filter algorithms"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Alejandro Pérez-Sanjuán" },
+]
+keywords = ["kalman-filter", "extended-kalman-filter", "rts-smoother", "estimation"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "numpy",
+]
+
+[project.optional-dependencies]
+docs = [
+  "furo",
+  "Sphinx",
+]
+examples = [
+  "matplotlib",
+]
+test = [
+  "pykalman-bardo",
+  "pytest",
+]
+dev = [
+  "black",
+  "build",
+  "check-manifest",
+  "flake8",
+  "isort",
+  "pykalman-bardo",
+  "pytest",
+  "tox",
+  "twine",
+]
+
+[project.urls]
+Homepage = "https://github.com/Xylambda/kalmankit"
+Documentation = "https://xylambda.github.io/kalmankit/"
+Repository = "https://github.com/Xylambda/kalmankit"
+Issues = "https://github.com/Xylambda/kalmankit/issues"
+Changelog = "https://github.com/Xylambda/kalmankit/blob/master/CHANGELOG.md"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.versioneer]
+VCS = "git"
+style = "pep440"
+versionfile_source = "src/kalmankit/_version.py"
+versionfile_build = "kalmankit/_version.py"
+tag_prefix = "v"
+parentdir_prefix = "kalmankit-"
+
+[tool.pytest.ini_options]
+minversion = "4.0.2"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = [
+  "tests/*",
+  "**/*/_version.py",
+  "**/*/__init__.py",
+]
+
+[tool.black]
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"

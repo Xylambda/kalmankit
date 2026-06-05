@@ -28,6 +28,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0]
+
+### Added
+
+- Added multidimensional regression tests against `pykalman-bardo`.
+- Added optional dependency groups for `test`, `docs`, `examples`, and `dev`.
+
+### Changed
+
+- Moved package metadata and tool configuration into `pyproject.toml`.
+- Modernized GitHub Actions for tests, distribution builds, documentation, and PyPI publishing.
+- Updated `tox` for currently supported Python versions and separated test, lint, manifest, and build checks.
+- Updated examples so their data/model shapes and plotted covariance values match the Kalman formulation.
+
+### Removed
+
+- Removed legacy `requirements*.txt` files in favor of `pyproject.toml` dependencies and extras.
+- Removed legacy `setup.cfg`; `setup.py` is now only a Versioneer compatibility shim.
+
+### Fixed
+
+- Fixed standard and extended Kalman covariance prediction to use `A @ P @ A.T + Q`.
+- Fixed RTS smoother transition indexing, smoothing gain, covariance update, and control-offset handling.
+
 ## [1.7.10]
 
 ### Changed

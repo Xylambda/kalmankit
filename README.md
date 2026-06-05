@@ -29,7 +29,7 @@ pip install kalmankit
 **Developer**
 ```bash
 git clone https://github.com/Xylambda/kalmankit.git
-pip install -e kalmankit/. -r kalmankit/requirements-dev.txt
+pip install -e "kalmankit/.[dev]"
 ```
 
 ## Tests
@@ -40,13 +40,18 @@ pytest -v tests/
 ```
 
 ## Usage
-The library provides 3 examples of usage:
+The library provides 5 examples of usage:
 1. [Moving Average](examples/moving_average.py)
 2. [Market Beta estimation](examples/market_beta.py)
 3. [Pendulum estimation with EKF](examples/pendulum.py)
+4. [Standard RTS smoothing for constant-velocity tracking](examples/constant_velocity_smoothing.py)
+5. [Extended RTS smoothing for a nonlinear pendulum](examples/pendulum_smoothing.py)
 
-A `requirements-example.txt` is provided to install the needed dependencies to
-run the examples.
+Install the `examples` extra to run the examples:
+
+```bash
+pip install -e ".[examples]"
+```
 
 ## References
 * Matlab - [Understanding Kalman Filters](https://www.youtube.com/playlist?list=PLn8PRpmsu08pzi6EMiYnR-076Mh-q3tWr)

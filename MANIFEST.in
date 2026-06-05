@@ -1,13 +1,13 @@
 include pyproject.toml
 include versioneer.py
-include kalmanfilter/_version.py
-include src/kalmanfilter/_version.py
+include src/kalmankit/_version.py
+include .flake8
 
 # Include the README
-# include *.md
+include *.md
 
 # Include the license file
-# include LICENSE.txt
+include LICENSE
 
-# Include the data files
-# recursive-include data *
+# Include image assets used by the README.
+recursive-include img *.png
